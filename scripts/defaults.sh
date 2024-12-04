@@ -121,25 +121,10 @@ fi
 # Keyboard Shortcuts
 get_consent "Set Custom Screenshot Keyboard Shortcuts"
 if has_consent; then
-  echo "Setting Custom Screenshot Keyboard Shortcuts..."
+  e_pending "Setting Custom Screenshot Keyboard Shortcuts..."
 
-  # Save picture of screen as a file (Control + Shift + 4)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 28 '<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>parameters</key>
-            <array>
-                <integer>52</integer>
-                <integer>21</integer>
-                <integer>1179648</integer>
-            </array>
-            <key>type</key><string>standard</string>
-        </dict>
-    </dict>'
-
-  # Copy picture of screen to clipboard (Shift + 4)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 29 '<dict>
+  # Save picture of screen as a file (^⇧$4)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 20 '<dict>
         <key>enabled</key><true/>
         <key>value</key>
         <dict>
@@ -153,23 +138,23 @@ if has_consent; then
         </dict>
     </dict>'
 
-  # Save picture of selected area as a file (Control + Shift + 3)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 30 '<dict>
+  # Copy picture of screen to clipboard (⇧$4)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 21 '<dict>
         <key>enabled</key><true/>
         <key>value</key>
         <dict>
             <key>parameters</key>
             <array>
-                <integer>51</integer>
-                <integer>20</integer>
-                <integer>1179648</integer>
+                <integer>52</integer>
+                <integer>21</integer>
+                <integer>131072</integer>
             </array>
             <key>type</key><string>standard</string>
         </dict>
     </dict>'
 
-  # Copy picture of selected area to clipboard (Shift + 3)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 31 '<dict>
+  # Save picture of selected area as a file (^⇧$3)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 19 '<dict>
         <key>enabled</key><true/>
         <key>value</key>
         <dict>
@@ -183,7 +168,22 @@ if has_consent; then
         </dict>
     </dict>'
 
-  # Screenshot and recording options (Shift + 5)
+  # Copy picture of selected area to clipboard (⇧$3)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 22 '<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>parameters</key>
+            <array>
+                <integer>51</integer>
+                <integer>20</integer>
+                <integer>131072</integer>
+            </array>
+            <key>type</key><string>standard</string>
+        </dict>
+    </dict>'
+
+  # Screenshot and recording options (⇧$5)
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 184 '<dict>
         <key>enabled</key><true/>
         <key>value</key>
@@ -198,9 +198,11 @@ if has_consent; then
         </dict>
     </dict>'
 
-  # Restart SystemUIServer to apply changes
+  # Kill system UI server and cfprefsd to apply changes
   killall SystemUIServer
-  echo "Screenshot shortcuts updated successfully"
+  killall cfprefsd
+
+  e_message "Screenshot shortcuts updated successfully. You may need to log out and back in for changes to take effect."
 fi
 
 get_consent "Disable Spotlight Keyboard Shortcuts"
