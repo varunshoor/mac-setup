@@ -9,6 +9,7 @@ e_message "Creating defaults"
 # Dock
 get_consent "Autohide Dock"
 if has_consent; then
+  # VALIDATED
   e_pending "Autohiding Dock"
   defaults write com.apple.dock autohide -boolean true
   killall Dock
@@ -16,6 +17,7 @@ fi
 
 get_consent "Reduce dock auto hide animation"
 if has_consent; then
+  # VALIDATED
   e_pending "Reducing Dock auto hide animation"
   defaults write com.apple.dock autohide-time-modifier -float 0.25
   killall Dock
@@ -23,6 +25,7 @@ fi
 
 get_consent "Remove Dock Delay for Auto Hide & Auto-Show"
 if has_consent; then
+  # VALIDATED
   e_pending "Removing Dock delay"
   defaults write com.apple.dock autohide-delay -float 0
   killall Dock
@@ -30,6 +33,7 @@ fi
 
 get_consent "Set the icon size of Dock items to 63 pixels"
 if has_consent; then
+  # VALIDATED
   e_pending "Setting Dock icon size to 63 pixels"
   defaults write com.apple.dock tilesize -int 63
   killall Dock
@@ -38,9 +42,17 @@ fi
 # Finder
 get_consent "Display hidden Finder files/folders"
 if has_consent; then
+  # VALIDATED
   e_pending "Displaying hidden Finder files/folders"
   defaults write com.apple.finder AppleShowAllFiles -boolean true
   killall Finder
+fi
+
+get_consent "Default Finder view is Column"
+if has_consent; then
+  # VALIDATED
+  e_pending "Setting default Finder view to Column"
+  defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 fi
 
 get_consent "Update other Finder settings"
@@ -48,23 +60,28 @@ if has_consent; then
   e_pending "Updating other Finder settings"
 
   # Show items on desktop
+  # VALIDATED
   defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
   defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
   defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
   defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 
   # Set new Finder windows to open to Downloads folder
+  # VALIDATED
   defaults write com.apple.finder NewWindowTarget -string "PfLo"
   defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Downloads/"
 
   # Disable iCloud Desktop & Documents sync
+  # VALIDATED
   defaults write com.apple.finder FXICloudDriveDesktop -bool false
   defaults write com.apple.finder FXICloudDriveDocuments -bool false
 
   # Open folders in tabs instead of new windows
+  # VALIDATED
   defaults write com.apple.finder FinderSpawnTab -bool true
 
   # Favorites
+  # VALIDATED
   defaults write com.apple.sidebarlists systemitems -dict-add ShowRecentTags -bool true
   defaults write com.apple.sidebarlists favoriteritems -dict-add ShowRecents -bool true
   defaults write com.apple.sidebarlists favoriteritems -dict-add ShowAirDrop -bool true
@@ -75,7 +92,7 @@ if has_consent; then
   defaults write com.apple.sidebarlists favoriteritems -dict-add ShowMovies -bool false
   defaults write com.apple.sidebarlists favoriteritems -dict-add ShowMusic -bool false
   defaults write com.apple.sidebarlists favoriteritems -dict-add ShowPictures -bool false
-  defaults write com.apple.sidebarlists favoriteritems -dict-add ShowHome -bool true
+  defaults write com.apple.sidebarlists favoriteritems -dict-add ShowHome -bool true # NOT WORKING
 
   # iCloud
   defaults write com.apple.sidebarlists clouditems -dict-add ShowiCloudDrive -bool true
@@ -94,14 +111,9 @@ if has_consent; then
 fi
 
 # Keyboard
-get_consent "Enabling full keyboard access for all controls (e.g. enable Tab in modal dialogs)"
-if has_consent; then
-  e_pending "Enabling full keyboard access"
-  defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
-fi
-
 get_consent "Enable Function Keys"
 if has_consent; then
+  # VALIDATED
   e_pending "Enabling Function Keys"
   defaults write -g com.apple.keyboard.fnState -bool true
 fi
@@ -109,6 +121,7 @@ fi
 # Keyboard Shortcuts
 get_consent "Set Custom Screenshot Keyboard Shortcuts"
 if has_consent; then
+  # NOT WORKING
   e_pending "Setting Custom Screenshot Keyboard Shortcuts"
 
   # Configure screenshot keyboard shortcuts
@@ -126,32 +139,82 @@ get_consent "Disable Spotlight Keyboard Shortcuts"
 if has_consent; then
   e_pending "Disabling Spotlight Keyboard Shortcuts"
   # Disable Spotlight search shortcut (⌘Space)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{ enabled = 0; value = { parameters = (32, 49, 1048576); type = standard; }; }"
-
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'
   # Disable Finder search window shortcut (⌃⌘Space)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 "{ enabled = 0; value = { parameters = (32, 49, 1572864); type = standard; }; }"
-
-  # Restart SystemUIServer to apply changes
-  killall SystemUIServer
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'
 fi
 
 get_consent "Update Mission Control Keyboard Shortcuts"
 if has_consent; then
   e_pending "Updating Mission Control Keyboard Shortcuts"
-
   # Disable Move left/right space shortcuts
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "{ enabled = 0; value = { parameters = (65535, 123, 11796480); type = standard; }; }"
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{ enabled = 0; value = { parameters = (65535, 124, 11796480); type = standard; }; }"
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 '<dict><key>enabled</key><false/></dict>'
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 '<dict><key>enabled</key><false/></dict>'
 
   # Enable Switch to Desktop shortcuts
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 118 "{ enabled = 1; value = { parameters = (49, 18, 11796480); type = standard; }; }" # Desktop 1 (^⌥1)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 119 "{ enabled = 1; value = { parameters = (50, 19, 11796480); type = standard; }; }" # Desktop 2 (^⌥2)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 120 "{ enabled = 1; value = { parameters = (51, 20, 11796480); type = standard; }; }" # Desktop 3 (^⌥3)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 121 "{ enabled = 1; value = { parameters = (52, 21, 11796480); type = standard; }; }" # Desktop 4 (^⌥4)
+  # Desktop 1 (^⌥1)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 118 '<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>parameters</key>
+            <array>
+                <integer>49</integer>
+                <integer>18</integer>
+                <integer>11796480</integer>
+            </array>
+            <key>type</key><string>standard</string>
+        </dict>
+    </dict>'
 
-  # Restart SystemUIServer to apply changes
-  killall SystemUIServer
+  # Desktop 2 (^⌥2)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 119 '<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>parameters</key>
+            <array>
+                <integer>50</integer>
+                <integer>19</integer>
+                <integer>11796480</integer>
+            </array>
+            <key>type</key><string>standard</string>
+        </dict>
+    </dict>'
+
+  # Desktop 3 (^⌥3)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 120 '<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>parameters</key>
+            <array>
+                <integer>51</integer>
+                <integer>20</integer>
+                <integer>11796480</integer>
+            </array>
+            <key>type</key><string>standard</string>
+        </dict>
+    </dict>'
+
+  # Desktop 4 (^⌥4)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 121 '<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>parameters</key>
+            <array>
+                <integer>52</integer>
+                <integer>21</integer>
+                <integer>11796480</integer>
+            </array>
+            <key>type</key><string>standard</string>
+        </dict>
+    </dict>'
 fi
+
+# Restart SystemUIServer to apply changes
+killall SystemUIServer
 
 # Text Replacements
 get_consent "Add custom text replacements"
@@ -159,6 +222,7 @@ if has_consent; then
   e_pending "Adding custom text replacements"
 
   # Check if text replacement exists before adding
+  # NOT WORKING
   if ! defaults read -g NSUserDictionaryReplacementItems | grep -q "varun.shoor@gmail.com"; then
     defaults write -g NSUserDictionaryReplacementItems -array-add '{
       on = 1;
@@ -174,18 +238,21 @@ fi
 # Keyboard Misc
 get_consent "Disable auto-correct"
 if has_consent; then
+  # VALIDATED
   e_pending "Disabling auto-correct"
   defaults write -g NSAutomaticSpellingCorrectionEnabled -boolean false
 fi
 
 get_consent "Disable auto-capitalization"
 if has_consent; then
+  # VALIDATED
   e_pending "Disabling auto-capitalization"
   defaults write -g NSAutomaticCapitalizationEnabled -boolean false
 fi
 
 get_consent "Set a fast keyboard repeat rate"
 if has_consent; then
+  # VALIDATED
   e_pending "Setting fast keyboard repeat rate"
   defaults write -g KeyRepeat -int 2
   defaults write -g InitialKeyRepeat -int 15
@@ -193,12 +260,22 @@ fi
 
 get_consent "Allow text selection in Quick Look"
 if has_consent; then
+  # VALIDATED
   e_pending "Allowing text selection in Quick Look"
   defaults write com.apple.finder QLEnableTextSelection -boolean true
 fi
 
+get_consent "Disable smart quotes and smart dashes"
+if has_consent; then
+  # VALIDATED
+  e_pending "Disabling smart quotes and smart dashes"
+  defaults write -g NSAutomaticQuoteSubstitutionEnabled -boolean false
+  defaults write -g NSAutomaticDashSubstitutionEnabled -boolean false
+fi
+
 get_consent "Disable add fullstop with double space"
 if has_consent; then
+  # VALIDATED
   e_pending "Disabling add fullstop with double space"
   defaults write -g NSAutomaticPeriodSubstitutionEnabled -boolean false
 fi
@@ -207,39 +284,40 @@ fi
 get_consent "Don't open files in Safari after downloading"
 if has_consent; then
   e_pending "Disabling auto-open in Safari"
-  defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
+  sudo defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
 fi
 
 get_consent "Don't prompt for confirmation before downloading"
 if has_consent; then
   e_pending "Disabling download confirmation in Safari"
-  defaults write com.apple.Safari SuppressPromptForDownload -boolean true
+  sudo defaults write com.apple.Safari SuppressPromptForDownload -boolean true
 fi
 
 get_consent "Show Develop menu in Safari"
 if has_consent; then
   e_pending "Showing Develop menu in Safari"
-  defaults write com.apple.Safari IncludeDevelopMenu -boolean true
-  defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-  defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
+  sudo defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+  sudo defaults write com.apple.Safari IncludeDevelopMenu -boolean true
+  sudo defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+  sudo defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
 fi
 
 get_consent "Adding a context menu item for showing the Web Inspector in web views"
 if has_consent; then
   e_pending "Adding Web Inspector context menu item"
-  defaults write NSGlobalDomain WebKitDeveloperExtras -boolean true
+  sudo defaults write NSGlobalDomain WebKitDeveloperExtras -boolean true
 fi
 
 get_consent "Making Safari's search banners default to Contains instead of Starts With"
 if has_consent; then
   e_pending "Setting Safari search banners to Contains"
-  defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -boolean false
+  sudo defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -boolean false
 fi
 
 get_consent "Removing useless icons from Safari's bookmarks bar"
 if has_consent; then
   e_pending "Removing useless icons from Safari's bookmarks bar"
-  defaults write com.apple.Safari ProxiesInBookmarksBar "()"
+  sudo defaults write com.apple.Safari ProxiesInBookmarksBar "()"
 fi
 
 get_consent "Update other Safari Settings"
@@ -247,48 +325,48 @@ if has_consent; then
   e_pending "Updating other Safari settings"
 
   # Set Safari's home page to `about:blank` for faster loading
-  defaults write com.apple.Safari HomePage -string "about:blank"
+  sudo defaults write com.apple.Safari HomePage -string "about:blank"
   # Set homepage to about:blank
-  defaults write com.apple.Safari HomePage -string "about:blank"
+  sudo defaults write com.apple.Safari HomePage -string "about:blank"
 
   # Set history removal to after two weeks (1209600 seconds)
-  defaults write com.apple.Safari HistoryAgeInDaysLimit -int 14
+  sudo defaults write com.apple.Safari HistoryAgeInDaysLimit -int 14
 
   # Set new windows and tabs to open with empty page
   # 0 = Top Sites
   # 1 = Homepage
   # 4 = Empty Page
   # 5 = Same Page
-  defaults write com.apple.Safari NewWindowBehavior -int 4
-  defaults write com.apple.Safari NewTabBehavior -int 4
+  sudo defaults write com.apple.Safari NewWindowBehavior -int 4
+  sudo defaults write com.apple.Safari NewTabBehavior -int 4
 
   # Set Safari to open with windows from last session
   # 1 = New Window
   # 2 = New Private Window
   # 3 = All windows from last session
-  defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
+  sudo defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
 
   # Prevent Safari from opening 'safe' files automatically after downloading
-  defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
+  sudo defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
 
   # Enable the Develop menu and the Web Inspector in Safari
-  defaults write com.apple.Safari IncludeDevelopMenu -boolean true
-  defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -boolean true
-  defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -boolean true
+  sudo defaults write com.apple.Safari IncludeDevelopMenu -boolean true
+  sudo defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -boolean true
+  sudo defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -boolean true
 
   # Add a context menu item for showing the Web Inspector in web views
-  defaults write NSGlobalDomain WebKitDeveloperExtras -boolean true
+  sudo defaults write NSGlobalDomain WebKitDeveloperExtras -boolean true
 
   # Update Safari settings
-  defaults write com.apple.Safari ShowFavoritesBar -boolean false
-  defaults write com.apple.Safari ShowSidebarInTopSites -boolean false
-  defaults write com.apple.Safari ShowSidebarInNewWindows -boolean false
-  defaults write com.apple.Safari ShowSidebar -boolean false
-  defaults write com.apple.Safari SendDoNotTrackHTTPHeader -boolean true
-  defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -boolean true
-  defaults write com.apple.Safari ShowFullURLInSmartSearchField -boolean true
-  defaults write com.apple.Safari SuppressSearchSuggestions -boolean true
-  defaults write com.apple.Safari UniversalSearchEnabled -boolean false
+  sudo defaults write com.apple.Safari ShowFavoritesBar -boolean false
+  sudo defaults write com.apple.Safari ShowSidebarInTopSites -boolean false
+  sudo defaults write com.apple.Safari ShowSidebarInNewWindows -boolean false
+  sudo defaults write com.apple.Safari ShowSidebar -boolean false
+  sudo defaults write com.apple.Safari SendDoNotTrackHTTPHeader -boolean true
+  sudo defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -boolean true
+  sudo defaults write com.apple.Safari ShowFullURLInSmartSearchField -boolean true
+  sudo defaults write com.apple.Safari SuppressSearchSuggestions -boolean true
+  sudo defaults write com.apple.Safari UniversalSearchEnabled -boolean false
   # Restart Safari for changes to take effect
   killall Safari
 fi
@@ -432,7 +510,7 @@ fi
 get_consent "Enable Night Shift"
 if has_consent; then
   e_pending "Enabling Night Shift"
-  defaults write /Library/Preferences/com.apple.CoreDisplay nightShift -boolean true
+  sudo defaults write /Library/Preferences/com.apple.CoreDisplay nightShift -boolean true
 fi
 
 get_consent "Disable Stage Manager"
@@ -441,14 +519,9 @@ if has_consent; then
   defaults write com.apple.dock mcx-expose-disabled -boolean true
 fi
 
-get_consent "Default Finder view is Column"
-if has_consent; then
-  e_pending "Setting default Finder view to Column"
-  defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
-fi
-
 get_consent "Setup Hot Corners"
 if has_consent; then
+  # VALIDATED
   e_pending "Setting up Hot Corners"
 
   # Set Top Left (position 0) to Start Screen Saver (5)
@@ -462,6 +535,11 @@ if has_consent; then
   # Bottom Left: Desktop
   defaults write com.apple.dock wvous-bl-corner -int 4
   defaults write com.apple.dock wvous-bl-modifier -int 0
+
+  # Bottom Right: Disabled (0)
+  defaults write com.apple.dock wvous-br-corner -int 0
+  defaults write com.apple.dock wvous-br-modifier -int 0
+
   killall Dock
 fi
 
@@ -531,17 +609,17 @@ fi
 get_consent "Enable scroll gesture with modifier key"
 if has_consent; then
   e_pending "Enabling scroll gesture with modifier key"
-  defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
-  defaults write com.apple.universalaccess closeViewModifierMask -int 262144 # Control key
+  sudo defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
+  sudo defaults write com.apple.universalaccess closeViewModifierMask -int 262144 # Control key
 
   # Set zoom style to full screen
-  defaults write com.apple.universalaccess closeViewZoomMode -int 0
+  sudo defaults write com.apple.universalaccess closeViewZoomMode -int 0
 fi
 
 get_consent "Enable Reduce Motion"
 if has_consent; then
   e_pending "Enabling Reduce Motion"
-  defaults write com.apple.universalaccess reduceMotion -boolean true
+  sudo defaults write com.apple.universalaccess reduceMotion -boolean true
 fi
 
 get_consent "Disable wallpaper tinting in windows"
@@ -609,13 +687,6 @@ get_consent "Check for software updates daily, not just once per week"
 if has_consent; then
   e_pending "Checking for software updates daily"
   defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
-fi
-
-get_consent "Disable smart quotes and smart dashes"
-if has_consent; then
-  e_pending "Disabling smart quotes and smart dashes"
-  defaults write -g NSAutomaticQuoteSubstitutionEnabled -boolean false
-  defaults write -g NSAutomaticDashSubstitutionEnabled -boolean false
 fi
 
 get_consent "Set Mouse Tracking Speed to Fast"
