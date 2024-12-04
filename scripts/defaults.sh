@@ -6,10 +6,32 @@ source utils.sh
 e_message "Creating defaults"
 # ------------------------------------------------------------------------------
 
+# Dock
 get_consent "Autohide Dock"
 if has_consent; then
   e_pending "Autohiding Dock"
   defaults write com.apple.dock autohide -boolean true
+  killall Dock
+fi
+
+get_consent "Reduce dock auto hide animation"
+if has_consent; then
+  e_pending "Reducing Dock auto hide animation"
+  defaults write com.apple.dock autohide-time-modifier -float 0.25
+  killall Dock
+fi
+
+get_consent "Remove Dock Delay for Auto Hide & Auto-Show"
+if has_consent; then
+  e_pending "Removing Dock delay"
+  defaults write com.apple.dock autohide-delay -float 0
+  killall Dock
+fi
+
+get_consent "Set the icon size of Dock items to 63 pixels"
+if has_consent; then
+  e_pending "Setting Dock icon size to 63 pixels"
+  defaults write com.apple.dock tilesize -int 63
   killall Dock
 fi
 
@@ -69,6 +91,19 @@ if has_consent; then
 
   # Restart Finder to apply changes
   killall Finder
+fi
+
+# Keyboard
+get_consent "Enabling full keyboard access for all controls (e.g. enable Tab in modal dialogs)"
+if has_consent; then
+  e_pending "Enabling full keyboard access"
+  defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+fi
+
+get_consent "Enable Function Keys"
+if has_consent; then
+  e_pending "Enabling Function Keys"
+  defaults write -g com.apple.keyboard.fnState -bool true
 fi
 
 # Keyboard Shortcuts
@@ -207,6 +242,57 @@ if has_consent; then
   defaults write com.apple.Safari ProxiesInBookmarksBar "()"
 fi
 
+get_consent "Update other Safari Settings"
+if has_consent; then
+  e_pending "Updating other Safari settings"
+
+  # Set Safari's home page to `about:blank` for faster loading
+  defaults write com.apple.Safari HomePage -string "about:blank"
+  # Set homepage to about:blank
+  defaults write com.apple.Safari HomePage -string "about:blank"
+
+  # Set history removal to after two weeks (1209600 seconds)
+  defaults write com.apple.Safari HistoryAgeInDaysLimit -int 14
+
+  # Set new windows and tabs to open with empty page
+  # 0 = Top Sites
+  # 1 = Homepage
+  # 4 = Empty Page
+  # 5 = Same Page
+  defaults write com.apple.Safari NewWindowBehavior -int 4
+  defaults write com.apple.Safari NewTabBehavior -int 4
+
+  # Set Safari to open with windows from last session
+  # 1 = New Window
+  # 2 = New Private Window
+  # 3 = All windows from last session
+  defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
+
+  # Prevent Safari from opening 'safe' files automatically after downloading
+  defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
+
+  # Enable the Develop menu and the Web Inspector in Safari
+  defaults write com.apple.Safari IncludeDevelopMenu -boolean true
+  defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -boolean true
+  defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -boolean true
+
+  # Add a context menu item for showing the Web Inspector in web views
+  defaults write NSGlobalDomain WebKitDeveloperExtras -boolean true
+
+  # Update Safari settings
+  defaults write com.apple.Safari ShowFavoritesBar -boolean false
+  defaults write com.apple.Safari ShowSidebarInTopSites -boolean false
+  defaults write com.apple.Safari ShowSidebarInNewWindows -boolean false
+  defaults write com.apple.Safari ShowSidebar -boolean false
+  defaults write com.apple.Safari SendDoNotTrackHTTPHeader -boolean true
+  defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -boolean true
+  defaults write com.apple.Safari ShowFullURLInSmartSearchField -boolean true
+  defaults write com.apple.Safari SuppressSearchSuggestions -boolean true
+  defaults write com.apple.Safari UniversalSearchEnabled -boolean false
+  # Restart Safari for changes to take effect
+  killall Safari
+fi
+
 get_consent "Disable the warning when changing a file extension"
 if has_consent; then
   e_pending "Disabling file extension warning"
@@ -269,15 +355,6 @@ if has_consent; then
   defaults write com.apple.print.PrintingPrefs "Quit When Finished" -boolean true
 fi
 
-get_consent "Tap to click"
-if has_consent; then
-  e_pending "Enabling tap to click in the trackpad"
-  defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
-  sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-  sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-  sudo defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-fi
-
 get_consent "Play user interface sound effects OFF"
 if has_consent; then
   e_pending "Disabling user interface sound effects"
@@ -332,11 +409,24 @@ if has_consent; then
   defaults write com.apple.controlcenter Battery -bool true
 fi
 
+get_consent "Disable Spotlight in Menu Bar"
+if has_consent; then
+  e_pending "Disabling Spotlight in Menu Bar"
+  defaults write com.apple.Spotlight MenuItemHidden -int 1
+fi
+
 get_consent "Restart menu bar"
 if has_consent; then
   e_pending "Restarting menu bar"
   killall SystemUIServer
   killall ControlCenter
+fi
+
+# Time and Date
+get_consent "Disable 24 Hour Time"
+if has_consent; then
+  e_pending "Disabling 24 Hour Time"
+  defaults write NSGlobalDomain AppleICUForce12HourTime -bool true
 fi
 
 get_consent "Enable Night Shift"
@@ -355,6 +445,24 @@ get_consent "Default Finder view is Column"
 if has_consent; then
   e_pending "Setting default Finder view to Column"
   defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+fi
+
+get_consent "Setup Hot Corners"
+if has_consent; then
+  e_pending "Setting up Hot Corners"
+
+  # Set Top Left (position 0) to Start Screen Saver (5)
+  defaults write com.apple.dock wvous-tl-corner -int 5
+  defaults write com.apple.dock wvous-tl-modifier -int 0
+
+  # Set Top Right (position 1) to Disable Screen Saver (6)
+  defaults write com.apple.dock wvous-tr-corner -int 6
+  defaults write com.apple.dock wvous-tr-modifier -int 0
+
+  # Bottom Left: Desktop
+  defaults write com.apple.dock wvous-bl-corner -int 4
+  defaults write com.apple.dock wvous-bl-modifier -int 0
+  killall Dock
 fi
 
 get_consent "Disable Dock magnification"
@@ -436,6 +544,13 @@ if has_consent; then
   defaults write com.apple.universalaccess reduceMotion -boolean true
 fi
 
+get_consent "Disable wallpaper tinting in windows"
+if has_consent; then
+  e_pending "Disabling wallpaper tinting in windows"
+  defaults write -g AppleReduceDesktopTinting -bool true
+fi
+
+# Trackpad
 get_consent "Enable trackpad for dragging"
 if has_consent; then
   e_pending "Enabling trackpad for dragging"
@@ -445,12 +560,6 @@ if has_consent; then
   # Set dragging style (without drag lock)
   defaults write com.apple.AppleMultitouchTrackpad DragLock -bool false
   defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -bool false
-fi
-
-get_consent "Disable wallpaper tinting in windows"
-if has_consent; then
-  e_pending "Disabling wallpaper tinting in windows"
-  defaults write -g AppleReduceDesktopTinting -bool true
 fi
 
 get_consent "Enable Trackpad Gestures"
@@ -467,24 +576,26 @@ if has_consent; then
   killall Dock
 fi
 
-get_consent "Reduce dock auto hide animation"
+get_consent "Tap to click"
 if has_consent; then
-  e_pending "Reducing Dock auto hide animation"
-  defaults write com.apple.dock autohide-time-modifier -float 0.25
-  killall Dock
+  e_pending "Enabling tap to click in the trackpad"
+  defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+  sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+  sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+  sudo defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 fi
 
-get_consent "Remove Dock Delay for Auto Hide & Auto-Show"
+get_consent "Enable Three Finger Drag"
 if has_consent; then
-  e_pending "Removing Dock delay"
-  defaults write com.apple.dock autohide-delay -float 0
-  killall Dock
-fi
+  e_pending "Enabling Three Finger Drag"
+  defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
 
-get_consent "Set the icon size of Dock items to 63 pixels"
-if has_consent; then
-  e_pending "Setting Dock icon size to 63 pixels"
-  defaults write com.apple.dock tilesize -int 63
+  # Also need to enable dragging itself
+  defaults write com.apple.AppleMultitouchTrackpad Dragging -bool true
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -bool true
+
+  # Restart trackpad driver to apply changes
   killall Dock
 fi
 
@@ -505,12 +616,6 @@ if has_consent; then
   e_pending "Disabling smart quotes and smart dashes"
   defaults write -g NSAutomaticQuoteSubstitutionEnabled -boolean false
   defaults write -g NSAutomaticDashSubstitutionEnabled -boolean false
-fi
-
-get_consent "Enabling full keyboard access for all controls (e.g. enable Tab in modal dialogs)"
-if has_consent; then
-  e_pending "Enabling full keyboard access"
-  defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 fi
 
 get_consent "Set Mouse Tracking Speed to Fast"
