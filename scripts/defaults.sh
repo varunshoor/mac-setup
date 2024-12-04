@@ -124,79 +124,53 @@ if has_consent; then
   e_pending "Setting Custom Screenshot Keyboard Shortcuts..."
 
   # Save picture of screen as a file (^⇧$4)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 20 '<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>parameters</key>
-            <array>
-                <integer>52</integer>
-                <integer>21</integer>
-                <integer>131072</integer>
-            </array>
-            <key>type</key><string>standard</string>
-        </dict>
-    </dict>'
-
-  # Copy picture of screen to clipboard (⇧$4)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 21 '<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>parameters</key>
-            <array>
-                <integer>52</integer>
-                <integer>21</integer>
-                <integer>131072</integer>
-            </array>
-            <key>type</key><string>standard</string>
-        </dict>
-    </dict>'
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 19 '{
+        "enabled" = 1;
+        "value" = {
+            "parameters" = (52, 21, 131072);
+            "type" = "standard";
+        };
+    }'
 
   # Save picture of selected area as a file (^⇧$3)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 19 '<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>parameters</key>
-            <array>
-                <integer>51</integer>
-                <integer>20</integer>
-                <integer>131072</integer>
-            </array>
-            <key>type</key><string>standard</string>
-        </dict>
-    </dict>'
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 20 '{
+        "enabled" = 1;
+        "value" = {
+            "parameters" = (51, 20, 131072);
+            "type" = "standard";
+        };
+    }'
+
+  # Copy picture of screen to clipboard (⇧$4)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 21 '{
+        "enabled" = 1;
+        "value" = {
+            "parameters" = (52, 21, 131072);
+            "type" = "standard";
+        };
+    }'
 
   # Copy picture of selected area to clipboard (⇧$3)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 22 '<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>parameters</key>
-            <array>
-                <integer>51</integer>
-                <integer>20</integer>
-                <integer>131072</integer>
-            </array>
-            <key>type</key><string>standard</string>
-        </dict>
-    </dict>'
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 22 '{
+        "enabled" = 1;
+        "value" = {
+            "parameters" = (51, 20, 131072);
+            "type" = "standard";
+        };
+    }'
 
   # Screenshot and recording options (⇧$5)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 184 '<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>parameters</key>
-            <array>
-                <integer>53</integer>
-                <integer>23</integer>
-                <integer>131072</integer>
-            </array>
-            <key>type</key><string>standard</string>
-        </dict>
-    </dict>'
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 184 '{
+        "enabled" = 1;
+        "value" = {
+            "parameters" = (53, 23, 131072);
+            "type" = "standard";
+        };
+    }'
+
+  # Kill system UI server and cfprefsd to apply changes
+  killall SystemUIServer
+  killall cfprefsd
 
   # Kill system UI server and cfprefsd to apply changes
   killall SystemUIServer
@@ -268,68 +242,44 @@ if has_consent; then
 
   # Enable Switch to Desktop shortcuts
   # Desktop 1 (^⌥1)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 118 '<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>parameters</key>
-            <array>
-                <integer>49</integer>
-                <integer>18</integer>
-                <integer>11796480</integer>
-            </array>
-            <key>type</key><string>standard</string>
-        </dict>
-    </dict>'
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 118 '{
+    "enabled" = 1;
+    "value" = {
+        "parameters" = (49, 18, 786432);
+        "type" = "standard";
+    };
+  }'
 
   # Desktop 2 (^⌥2)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 119 '<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>parameters</key>
-            <array>
-                <integer>50</integer>
-                <integer>19</integer>
-                <integer>11796480</integer>
-            </array>
-            <key>type</key><string>standard</string>
-        </dict>
-    </dict>'
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 119 '{
+    "enabled" = 1;
+    "value" = {
+        "parameters" = (50, 19, 786432);
+        "type" = "standard";
+    };
+  }'
 
   # Desktop 3 (^⌥3)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 120 '<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>parameters</key>
-            <array>
-                <integer>51</integer>
-                <integer>20</integer>
-                <integer>11796480</integer>
-            </array>
-            <key>type</key><string>standard</string>
-        </dict>
-    </dict>'
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 120 '{
+    "enabled" = 1;
+    "value" = {
+        "parameters" = (51, 20, 786432);
+        "type" = "standard";
+    };
+  }'
 
   # Desktop 4 (^⌥4)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 121 '<dict>
-        <key>enabled</key><true/>
-        <key>value</key>
-        <dict>
-            <key>parameters</key>
-            <array>
-                <integer>52</integer>
-                <integer>21</integer>
-                <integer>11796480</integer>
-            </array>
-            <key>type</key><string>standard</string>
-        </dict>
-    </dict>'
-fi
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 121 '{
+    "enabled" = 1;
+    "value" = {
+        "parameters" = (52, 21, 786432);
+        "type" = "standard";
+    };
+  }'
 
-# Restart SystemUIServer to apply changes
-killall SystemUIServer
+  # Restart SystemUIServer to apply changes
+  killall SystemUIServer
+fi
 
 # Text Replacements
 get_consent "Add custom text replacements"
