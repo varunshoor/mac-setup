@@ -121,22 +121,91 @@ fi
 # Keyboard Shortcuts
 get_consent "Set Custom Screenshot Keyboard Shortcuts"
 if has_consent; then
-  # NOT WORKING
-  e_pending "Setting Custom Screenshot Keyboard Shortcuts"
+  echo "Setting Custom Screenshot Keyboard Shortcuts..."
 
-  # Configure screenshot keyboard shortcuts
-  defaults write com.apple.screencapture "kb-screenshot-file" -string "^⇧$4"          # Save picture of screen as a file
-  defaults write com.apple.screencapture "kb-screenshot-clipboard" -string "⇧$4"      # Copy picture of screen to clipboard
-  defaults write com.apple.screencapture "kb-screenshot-area-file" -string "^⇧$3"     # Save picture of selected area as a file
-  defaults write com.apple.screencapture "kb-screenshot-area-clipboard" -string "⇧$3" # Copy picture of selected area to clipboard
-  defaults write com.apple.screencapture "kb-screenshot-options" -string "⇧$5"        # Screenshot and recording options
+  # Save picture of screen as a file (Control + Shift + 4)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 28 '<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>parameters</key>
+            <array>
+                <integer>52</integer>
+                <integer>21</integer>
+                <integer>1179648</integer>
+            </array>
+            <key>type</key><string>standard</string>
+        </dict>
+    </dict>'
+
+  # Copy picture of screen to clipboard (Shift + 4)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 29 '<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>parameters</key>
+            <array>
+                <integer>52</integer>
+                <integer>21</integer>
+                <integer>131072</integer>
+            </array>
+            <key>type</key><string>standard</string>
+        </dict>
+    </dict>'
+
+  # Save picture of selected area as a file (Control + Shift + 3)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 30 '<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>parameters</key>
+            <array>
+                <integer>51</integer>
+                <integer>20</integer>
+                <integer>1179648</integer>
+            </array>
+            <key>type</key><string>standard</string>
+        </dict>
+    </dict>'
+
+  # Copy picture of selected area to clipboard (Shift + 3)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 31 '<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>parameters</key>
+            <array>
+                <integer>51</integer>
+                <integer>20</integer>
+                <integer>131072</integer>
+            </array>
+            <key>type</key><string>standard</string>
+        </dict>
+    </dict>'
+
+  # Screenshot and recording options (Shift + 5)
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 184 '<dict>
+        <key>enabled</key><true/>
+        <key>value</key>
+        <dict>
+            <key>parameters</key>
+            <array>
+                <integer>53</integer>
+                <integer>23</integer>
+                <integer>131072</integer>
+            </array>
+            <key>type</key><string>standard</string>
+        </dict>
+    </dict>'
 
   # Restart SystemUIServer to apply changes
   killall SystemUIServer
+  echo "Screenshot shortcuts updated successfully"
 fi
 
 get_consent "Disable Spotlight Keyboard Shortcuts"
 if has_consent; then
+  # VALIDATED. REQUIRES RESTART.
   e_pending "Disabling Spotlight Keyboard Shortcuts"
   # Disable Spotlight search shortcut (⌘Space)
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'
@@ -144,10 +213,54 @@ if has_consent; then
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'
 fi
 
+get_consent "Add Additional Spaces"
+if has_consent; then
+  e_pending "Adding Spaces"
+
+  # Function to count existing desktop spaces
+  count_spaces() {
+    # Count spaces by looking at persistent-others entries that are spacer-tiles
+    local count
+    count=$(defaults read com.apple.dock persistent-others | grep -c "spacer-tile")
+    echo "$count"
+  }
+
+  # Function to add a desktop space
+  add_desktop_space() {
+    defaults write com.apple.dock persistent-others -array-add '{ 
+        "tile-data" = { 
+            "list-type" = 1; 
+        }; 
+        "tile-type" = "spacer-tile"; 
+    }'
+  }
+
+  # Get current number of spaces
+  current_spaces=$(count_spaces)
+  desired_spaces=4
+
+  # Only add spaces if we have fewer than desired
+  if [ "$current_spaces" -lt "$desired_spaces" ]; then
+    spaces_to_add=$((desired_spaces - current_spaces))
+    echo "Adding $spaces_to_add new desktop spaces..."
+
+    for ((i = 1; i <= spaces_to_add; i++)); do
+      add_desktop_space
+    done
+
+    # Restart the Dock to apply changes
+    killall Dock
+    echo "Added new spaces successfully"
+  else
+    echo "Already have $current_spaces spaces, no new spaces needed"
+  fi
+fi
+
 get_consent "Update Mission Control Keyboard Shortcuts"
 if has_consent; then
   e_pending "Updating Mission Control Keyboard Shortcuts"
   # Disable Move left/right space shortcuts
+  # VALIDATED - REQUIRES RESTART.
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 '<dict><key>enabled</key><false/></dict>'
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 '<dict><key>enabled</key><false/></dict>'
 
@@ -219,6 +332,7 @@ killall SystemUIServer
 # Text Replacements
 get_consent "Add custom text replacements"
 if has_consent; then
+  # NOT WORKING
   e_pending "Adding custom text replacements"
 
   # Check if text replacement exists before adding
@@ -448,12 +562,15 @@ fi
 # Menu Bar
 get_consent "Automatically hide and show the menu bar"
 if has_consent; then
+  # VALIDATED
   e_pending "Automatically hiding and showing the menu bar"
   defaults write NSGlobalDomain _HIHideMenuBar -boolean true
 fi
 
 get_consent "Show date and time in menu bar"
 if has_consent; then
+  # VALIDATED
+
   e_pending "Showing date and time in menu bar"
   # Only add Clock if not already present
   if ! defaults read com.apple.systemuiserver menuExtras | grep -q "Clock.menu"; then
@@ -467,6 +584,7 @@ fi
 
 get_consent "Show Volume in menu bar"
 if has_consent; then
+  # NOT WORKING
   e_pending "Showing Volume in menu bar"
   # Only add Volume if not already present
   if ! defaults read com.apple.systemuiserver menuExtras | grep -q "Volume.menu"; then
@@ -478,8 +596,9 @@ get_consent "Update battery settings in menu bar"
 if has_consent; then
   e_pending "Updating battery settings in menu bar"
   # Show battery percentage in menu bar
-  defaults write com.apple.menuextra.battery ShowPercent -bool true
+  defaults write com.apple.menuextra.battery ShowPercent -bool true # NOT WORKING
 
+  # VALIDATED
   # Show battery in menu bar
   defaults write com.apple.controlcenter "NSStatusItem Visible Battery" -bool true
 
@@ -489,6 +608,7 @@ fi
 
 get_consent "Disable Spotlight in Menu Bar"
 if has_consent; then
+  # VALIDATED
   e_pending "Disabling Spotlight in Menu Bar"
   defaults write com.apple.Spotlight MenuItemHidden -int 1
 fi
@@ -503,6 +623,7 @@ fi
 # Time and Date
 get_consent "Disable 24 Hour Time"
 if has_consent; then
+  # VALIDATED
   e_pending "Disabling 24 Hour Time"
   defaults write NSGlobalDomain AppleICUForce12HourTime -bool true
 fi
