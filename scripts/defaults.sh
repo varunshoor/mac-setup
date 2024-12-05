@@ -12,6 +12,12 @@ if ! has_consent; then
   exit 1
 fi
 
+get_consent "Have you manually created three additional desktops in Mission Control"
+if ! has_consent; then
+  e_failure "Please create three additional desktops in Mission Control and run the script again"
+  exit 1
+fi
+
 # ------------------------------------------------------------------------------
 e_message "Creating defaults"
 # ------------------------------------------------------------------------------
@@ -307,7 +313,8 @@ get_consent "Enable High Power on Power Adapter"
 if has_consent; then
   e_pending "Enabling High Power on Power Adapter"
 
-  sudo defaults write com.apple.powerprofile -dict AC\ Power -int 2
+  # NOTWORKING
+  defaults write com.apple.powerprofile -dict AC\ Power -int 2
   sudo killall powerd
 fi
 
@@ -616,41 +623,41 @@ fi
 get_consent "Don't open files in Safari after downloading"
 if has_consent; then
   e_pending "Disabling auto-open in Safari"
-  sudo defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
+  defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
 fi
 
 get_consent "Don't prompt for confirmation before downloading"
 if has_consent; then
   e_pending "Disabling download confirmation in Safari"
-  sudo defaults write com.apple.Safari SuppressPromptForDownload -boolean true
+  defaults write com.apple.Safari SuppressPromptForDownload -boolean true
 fi
 
 get_consent "Show Develop menu in Safari"
 if has_consent; then
   e_pending "Showing Develop menu in Safari"
-  sudo defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-  sudo defaults write com.apple.Safari IncludeDevelopMenu -boolean true
-  sudo defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true
-  sudo defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-  sudo defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
+  defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+  defaults write com.apple.Safari IncludeDevelopMenu -boolean true
+  defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true
+  defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+  defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
 fi
 
 get_consent "Adding a context menu item for showing the Web Inspector in web views"
 if has_consent; then
   e_pending "Adding Web Inspector context menu item"
-  sudo defaults write NSGlobalDomain WebKitDeveloperExtras -boolean true
+  defaults write NSGlobalDomain WebKitDeveloperExtras -boolean true
 fi
 
 get_consent "Making Safari's search banners default to Contains instead of Starts With"
 if has_consent; then
   e_pending "Setting Safari search banners to Contains"
-  sudo defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -boolean false
+  defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -boolean false
 fi
 
 get_consent "Removing useless icons from Safari's bookmarks bar"
 if has_consent; then
   e_pending "Removing useless icons from Safari's bookmarks bar"
-  sudo defaults write com.apple.Safari ProxiesInBookmarksBar "()"
+  defaults write com.apple.Safari ProxiesInBookmarksBar "()"
 fi
 
 get_consent "Update other Safari Settings"
@@ -658,51 +665,64 @@ if has_consent; then
   e_pending "Updating other Safari settings"
 
   # Set Safari's home page to `about:blank` for faster loading
-  sudo defaults write com.apple.Safari HomePage -string "about:blank"
+  defaults write com.apple.Safari HomePage -string "about:blank"
   # Set homepage to about:blank
-  sudo defaults write com.apple.Safari HomePage -string "about:blank"
+  defaults write com.apple.Safari HomePage -string "about:blank"
 
   # Set history removal to after one week
-  sudo defaults write com.apple.Safari HistoryAgeInDaysLimit -int 7
+  defaults write com.apple.Safari HistoryAgeInDaysLimit -int 7
 
   # Set new windows and tabs to open with empty page
   # 0 = Top Sites
   # 1 = Homepage
   # 4 = Empty Page
   # 5 = Same Page
-  sudo defaults write com.apple.Safari NewWindowBehavior -int 1
-  sudo defaults write com.apple.Safari NewTabBehavior -int 1
+  defaults write com.apple.Safari NewWindowBehavior -int 1
+  defaults write com.apple.Safari NewTabBehavior -int 1
 
   # Set Safari to open with windows from last session
   # 1 = New Window
   # 2 = New Private Window
   # 3 = All windows from last session
-  sudo defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
-  sudo defaults write com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool false
+  defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
+  defaults write com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool false
 
   # Prevent Safari from opening 'safe' files automatically after downloading
-  sudo defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
+  echo "TEST1"
+  defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
+  echo "TEST2"
 
   # Update Safari settings
-  sudo defaults write com.apple.Safari ShowFavoritesBar -boolean false
-  sudo defaults write com.apple.Safari "ShowFavoritesBar-v2" -boolean false
-  sudo defaults write com.apple.Safari ShowSidebarInTopSites -boolean false
-  sudo defaults write com.apple.Safari ShowSidebarInNewWindows -boolean false
-  sudo defaults write com.apple.Safari ShowSidebar -boolean false
-  sudo defaults write com.apple.Safari SendDoNotTrackHTTPHeader -boolean true
-  sudo defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -boolean true
-  sudo defaults write com.apple.Safari ShowFullURLInSmartSearchField -boolean true
-  sudo defaults write com.apple.Safari SuppressSearchSuggestions -boolean true
-  sudo defaults write com.apple.Safari UniversalSearchEnabled -boolean false
+  echo "TEST3"
+  defaults write com.apple.Safari ShowFavoritesBar -boolean false
+  echo "TEST4"
+  defaults write com.apple.Safari "ShowFavoritesBar-v2" -boolean false
+  echo "TEST5"
+  defaults write com.apple.Safari ShowSidebarInTopSites -boolean false
+  echo "TEST6"
+  defaults write com.apple.Safari ShowSidebarInNewWindows -boolean false
+  echo "TEST7"
+  defaults write com.apple.Safari ShowSidebar -boolean false
+  echo "TEST8"
+  defaults write com.apple.Safari SendDoNotTrackHTTPHeader -boolean true
+  defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -boolean true
+  defaults write com.apple.Safari ShowFullURLInSmartSearchField -boolean true
+  defaults write com.apple.Safari SuppressSearchSuggestions -boolean true
+  echo "TEST9"
+  defaults write com.apple.Safari UniversalSearchEnabled -boolean false
+  echo "TEST10"
 
   # Disable Auto Fill Passwords
-  sudo defaults write com.apple.Safari AutoFillPasswords --boolean false
+  defaults write com.apple.Safari AutoFillPasswords --boolean false
+  echo "TEST11"
 
   # Disable Safari’s thumbnail cache for History and Top Sites
-  sudo defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
+  defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
 
   # Don’t allow websites to ask for permission to send push notifications
-  sudo defaults write com.apple.Safari CanPromptForPushNotifications -boolean false
+  echo "TEST12"
+  defaults write com.apple.Safari CanPromptForPushNotifications -boolean false
+  echo "TEST13"
 
   # Restart Safari for changes to take effect
   killall Safari
@@ -845,7 +865,7 @@ fi
 get_consent "Enable Night Shift"
 if has_consent; then
   e_pending "Enabling Night Shift"
-  sudo defaults write /Library/Preferences/com.apple.CoreDisplay nightShift -boolean true
+  defaults write /Library/Preferences/com.apple.CoreDisplay nightShift -boolean true
 fi
 
 get_consent "Disable Stage Manager"
@@ -919,19 +939,19 @@ fi
 get_consent "Enable scroll gesture with modifier key"
 if has_consent; then
   e_pending "Enabling scroll gesture with modifier key"
-  sudo defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
-  sudo defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
-  sudo defaults write com.apple.universalaccess closeViewModifierMask -int 262144    # Control key
-  sudo defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true # Follow the keyboard focus while zoomed in
+  defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
+  defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
+  defaults write com.apple.universalaccess closeViewModifierMask -int 262144    # Control key
+  defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true # Follow the keyboard focus while zoomed in
 
   # Set zoom style to full screen
-  sudo defaults write com.apple.universalaccess closeViewZoomMode -int 0
+  defaults write com.apple.universalaccess closeViewZoomMode -int 0
 fi
 
 get_consent "Enable Reduce Motion"
 if has_consent; then
   e_pending "Enabling Reduce Motion"
-  sudo defaults write com.apple.universalaccess reduceMotion -boolean true
+  defaults write com.apple.universalaccess reduceMotion -boolean true
 fi
 
 get_consent "Disable wallpaper tinting in windows"
@@ -983,10 +1003,10 @@ fi
 get_consent "Tap to click"
 if has_consent; then
   e_pending "Enabling tap to click in the trackpad"
-  defaults write com.apple.AppleMultitouchTrackpad Clicking -int 1
-  sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -int 1
-  sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-  sudo defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+  defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+  defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+  defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 fi
 
 get_consent "Enable Three Finger Drag"
@@ -1033,7 +1053,7 @@ get_consent "Disabling OS X Gate Keeper"
 if has_consent; then
   e_pending "Disabling Gate Keeper"
   sudo spctl --master-disable
-  sudo defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
+  defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
 
   # Disable the are you sure you want to open this application dialog
   defaults write com.apple.LaunchServices LSQuarantine -bool false
