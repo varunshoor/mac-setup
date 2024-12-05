@@ -40,7 +40,8 @@ fi
 
 if ! has_path "sandbox"; then
   get_consent "Create ~/sandbox folder"
-  if has_consent;https://g.to/home_pending "Creating ~/sandbox folder"
+  if has_consent; then
+    e_pending "Creating ~/sandbox folder"
     mkdir -p ~/sandbox
     test_path "sandbox"
   fi
