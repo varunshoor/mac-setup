@@ -205,7 +205,7 @@ if has_consent; then
   defaults write com.apple.sidebarlists favoriteritems -dict-add ShowMovies -bool false
   defaults write com.apple.sidebarlists favoriteritems -dict-add ShowMusic -bool false
   defaults write com.apple.sidebarlists favoriteritems -dict-add ShowPictures -bool false
-  defaults write com.apple.sidebarlists favoriteritems -dict-add ShowHome -bool true # NOT WORKING
+  # TODO: Use mysides to add custom
 
   # iCloud
   defaults write com.apple.sidebarlists clouditems -dict-add ShowiCloudDrive -bool true
@@ -334,6 +334,8 @@ if has_consent; then
   sudo pmset -b displaysleep 2
 fi
 
+# TODO: Use nightlight CLI to configure NightShift
+
 get_consent "Start screensaver after 2 minutes"
 if has_consent; then
   e_pending "Setting screensaver to 2 minutes"
@@ -348,9 +350,7 @@ fi
 
 get_consent "Require password immediately after sleep or screen saver begins"
 if has_consent; then
-  e_pending "Requiring password immediately after sleep or screen saver begins"
-  defaults -currentHost write com.apple.screensaver askForPassword -boolean true
-  defaults -currentHost write com.apple.screensaver askForPasswordDelay -int 5
+  e_message "You have to manually set this in System Preferences > Lock Screen as Apple has disabled this setting"
 fi
 
 killall SystemUIServer
@@ -359,6 +359,12 @@ get_consent "Turn display off on power adapter after 1 hour"
 if has_consent; then
   e_pending "Setting display off to 1 hour"
   sudo pmset -c displaysleep 60
+fi
+
+get_consent "Disable machine sleep while charging"
+if has_consent; then
+  e_pending "Disabling machine sleep while charging"
+  sudo pmset -c sleep 0
 fi
 
 # Keyboard
@@ -379,9 +385,6 @@ get_consent "Keyboard - Automatically illuminate built-in MacBook keyboard in lo
 if has_consent; then
   e_pending "Automatically illuminating built-in MacBook keyboard in low light"
   defaults write com.apple.BezelServices kDim -bool true
-
-  # Turn off keyboard illumination after 5 minutes of inactivity
-  defaults write com.apple.BezelServices kDimTime -int 300
 fi
 
 # Keyboard Shortcuts
@@ -798,43 +801,22 @@ if has_consent; then
   defaults write NSGlobalDomain _HIHideMenuBar -boolean true
 fi
 
-get_consent "Show date and time in menu bar"
-if has_consent; then
-  # VALIDATED
-
-  e_pending "Showing date and time in menu bar"
-  # Only add Clock if not already present
-  if ! defaults read com.apple.systemuiserver menuExtras | grep -q "Clock.menu"; then
-    defaults write com.apple.systemuiserver menuExtras -array-add "/System/Library/CoreServices/Menu Extras/Clock.menu"
-  fi
-
-  # Include date in the menu bar (System Preferences | Date & Time | Clock)
-  # https://apple.stackexchange.com/questions/180847/wrong-date-format-in-the-menu-bar
-  defaults write 'com.apple.menuextra.clock' 'DateFormat' -string 'EEE MMM d  h:mm:ss a'
-fi
-
-get_consent "Show Volume in menu bar"
-if has_consent; then
-  # NOT WORKING
-  e_pending "Showing Volume in menu bar"
-  # Only add Volume if not already present
-  if ! defaults read com.apple.systemuiserver menuExtras | grep -q "Volume.menu"; then
-    defaults write com.apple.systemuiserver menuExtras -array-add "/System/Library/CoreServices/Menu Extras/Volume.menu"
-  fi
-fi
-
 get_consent "Update battery settings in menu bar"
 if has_consent; then
   e_pending "Updating battery settings in menu bar"
-  # Show battery percentage in menu bar
-  defaults write com.apple.menuextra.battery ShowPercent -string "YES"
+  defaults write com.apple.menuextra.battery ShowPercent -bool true
+  defaults write ~/Library/Preferences/ByHost/com.apple.controlcenter.plist BatteryShowPercentage -bool true
 
-  # VALIDATED
   # Show battery in menu bar
   defaults write com.apple.controlcenter "NSStatusItem Visible Battery" -bool true
 
   # Show in Control Center
   defaults write com.apple.controlcenter Battery -bool true
+fi
+
+get_consent "Configure additional menu items"
+if has_consent; then
+  defaults write ~/Library/Preferences/ByHost/com.apple.controlcenter.plist Sound -int 18
 fi
 
 get_consent "Disable Spotlight in Menu Bar"
@@ -863,12 +845,6 @@ if has_consent; then
   # VALIDATED
   e_pending "Disabling 24 Hour Time"
   defaults write NSGlobalDomain AppleICUForce12HourTime -bool true
-fi
-
-get_consent "Enable Night Shift"
-if has_consent; then
-  e_pending "Enabling Night Shift"
-  defaults write /Library/Preferences/com.apple.CoreDisplay nightShift -boolean true
 fi
 
 get_consent "Disable Stage Manager"
@@ -938,6 +914,8 @@ if has_consent; then
   defaults write com.apple.spaces spans-displays -bool false
 fi
 
+e_message "You need to log out and back in for changes to take effect."
+
 # Accessibility
 get_consent "Enable scroll gesture with modifier key"
 if has_consent; then
@@ -946,6 +924,9 @@ if has_consent; then
   defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
   defaults write com.apple.universalaccess closeViewModifierMask -int 262144    # Control key
   defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true # Follow the keyboard focus while zoomed in
+  ## Enable continuous zoom with the pointer
+  defaults write com.apple.AppleMultitouchTrackpad HIDScrollZoomModifierMask 262144
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad 262144
 
   # Set zoom style to full screen
   defaults write com.apple.universalaccess closeViewZoomMode -int 0
@@ -978,8 +959,8 @@ if has_consent; then
   defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
 
   # Set dragging style (without drag lock)
-  defaults write com.apple.AppleMultitouchTrackpad DragLock -int 1
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -int 1
+  defaults write com.apple.AppleMultitouchTrackpad DragLock -int 0
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -int 0
 fi
 
 get_consent "Enable Trackpad Gestures"
@@ -999,6 +980,8 @@ if has_consent; then
   # Configure Mission Control gesture (Swipe Up with Four Fingers)
   defaults write com.apple.dock showMissionControlGestureEnabled -bool true
   defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerVertSwipeGesture -int 2
+
+  e_message "You need to configure the gestures for mission control etc manually in System Preferences > Trackpad"
 
   killall Dock
 fi
