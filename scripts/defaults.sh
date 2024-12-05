@@ -6,9 +6,15 @@ source utils.sh
 e_message "Running validation checks"
 # ------------------------------------------------------------------------------
 
-get_consent "Have you given full disk access to terminal?"
+get_consent "Have you given full disk access to terminal"
 if ! has_consent; then
   e_failure "Please give full disk access to terminal and run the script again"
+  exit 1
+fi
+
+get_consent "Have you given Accessibility access to terminal"
+if ! has_consent; then
+  e_failure "Please give Accessibility access to terminal and run the script again"
   exit 1
 fi
 
@@ -318,24 +324,44 @@ if has_consent; then
   sudo killall powerd
 fi
 
+get_consent "Set Display to Sleep after 60 minutes on Charger"
+if has_consent; then
+  e_pending "Setting Display to Sleep after 60 minutes on Charger"
+  sudo pmset -c displaysleep 60
+fi
+
+get_consent "Set Display to Sleep after 2 minutes on Battery"
+if has_consent; then
+  e_pending "Setting Display to Sleep after 2 minutes on Battery"
+  sudo pmset -b displaysleep 2
+fi
+
 get_consent "Start screensaver after 2 minutes"
 if has_consent; then
   e_pending "Setting screensaver to 2 minutes"
   defaults -currentHost write com.apple.screensaver idleTime -int 120
 fi
 
-get_consent "Turn display off on battery when inactive after 2 minutes"
+get_consent "Restart Automatically on Power Loss"
 if has_consent; then
-  e_pending "Setting display off to 2 minutes"
-  sudo pmset -b displaysleep 2
+  e_pending "Restarting Automatically on Power Loss"
+  sudo pmset -a autorestart 1
+fi
+
+get_consent "Restart Automatically if Computer Freezes"
+if has_consent; then
+  e_pending "Restarting Automatically if Computer Freezes"
+  sudo systemsetup -setrestartfreeze on
 fi
 
 get_consent "Require password immediately after sleep or screen saver begins"
 if has_consent; then
   e_pending "Requiring password immediately after sleep or screen saver begins"
-  defaults write com.apple.screensaver askForPassword -int 1
-  defaults write com.apple.screensaver askForPasswordDelay -int 0
+  defaults -currentHost write com.apple.screensaver askForPassword -boolean true
+  defaults -currentHost write com.apple.screensaver askForPasswordDelay -int 5
 fi
+
+killall SystemUIServer
 
 get_consent "Turn display off on power adapter after 1 hour"
 if has_consent; then
@@ -666,8 +692,6 @@ if has_consent; then
 
   # Set Safari's home page to `about:blank` for faster loading
   defaults write com.apple.Safari HomePage -string "about:blank"
-  # Set homepage to about:blank
-  defaults write com.apple.Safari HomePage -string "about:blank"
 
   # Set history removal to after one week
   defaults write com.apple.Safari HistoryAgeInDaysLimit -int 7
@@ -688,41 +712,28 @@ if has_consent; then
   defaults write com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool false
 
   # Prevent Safari from opening 'safe' files automatically after downloading
-  echo "TEST1"
   defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
-  echo "TEST2"
 
   # Update Safari settings
-  echo "TEST3"
   defaults write com.apple.Safari ShowFavoritesBar -boolean false
-  echo "TEST4"
   defaults write com.apple.Safari "ShowFavoritesBar-v2" -boolean false
-  echo "TEST5"
   defaults write com.apple.Safari ShowSidebarInTopSites -boolean false
-  echo "TEST6"
   defaults write com.apple.Safari ShowSidebarInNewWindows -boolean false
-  echo "TEST7"
   defaults write com.apple.Safari ShowSidebar -boolean false
-  echo "TEST8"
   defaults write com.apple.Safari SendDoNotTrackHTTPHeader -boolean true
   defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -boolean true
   defaults write com.apple.Safari ShowFullURLInSmartSearchField -boolean true
   defaults write com.apple.Safari SuppressSearchSuggestions -boolean true
-  echo "TEST9"
   defaults write com.apple.Safari UniversalSearchEnabled -boolean false
-  echo "TEST10"
 
   # Disable Auto Fill Passwords
-  defaults write com.apple.Safari AutoFillPasswords --boolean false
-  echo "TEST11"
+  defaults write com.apple.Safari AutoFillPasswords -bool false
 
   # Disable Safari’s thumbnail cache for History and Top Sites
   defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
 
   # Don’t allow websites to ask for permission to send push notifications
-  echo "TEST12"
   defaults write com.apple.Safari CanPromptForPushNotifications -boolean false
-  echo "TEST13"
 
   # Restart Safari for changes to take effect
   killall Safari
@@ -914,7 +925,7 @@ fi
 get_consent "Disable displays have separate spaces"
 if has_consent; then
   e_pending "Disabling displays have separate spaces"
-  defaults write com.apple.spaces spans-displays -boolean false
+  defaults write com.apple.spaces spans-displays -boolean true
 fi
 
 get_consent "Enable switching to space of application"
