@@ -3,8 +3,64 @@
 source utils.sh
 
 # ------------------------------------------------------------------------------
+e_message "Running validation checks"
+# ------------------------------------------------------------------------------
+
+get_consent "Have you given full disk access to terminal?"
+if ! has_consent; then
+  e_failure "Please give full disk access to terminal and run the script again"
+  exit 1
+fi
+
+# ------------------------------------------------------------------------------
 e_message "Creating defaults"
 # ------------------------------------------------------------------------------
+
+# Folders
+if ! has_path "dev"; then
+  get_consent "Create ~/dev folder"
+  if has_consent; then
+    e_pending "Creating ~/dev folder"
+    mkdir -p ~/dev
+    test_path "dev"
+  fi
+fi
+
+if ! has_path "sandbox"; then
+  get_consent "Create ~/sandbox folder"
+  if has_consent; then
+    e_pending "Creating ~/sandbox folder"
+    mkdir -p ~/sandbox
+    test_path "sandbox"
+  fi
+fi
+
+if ! has_path "design"; then
+  get_consent "Create ~/design folder"
+  if has_consent; then
+    e_pending "Creating ~/design folder"
+    mkdir -p ~/design
+    test_path "design"
+  fi
+fi
+
+if ! has_path "bottomline"; then
+  get_consent "Create ~/bottomline folder"
+  if has_consent; then
+    e_pending "Creating ~/bottomline folder"
+    mkdir -p ~/bottomline
+    test_path "bottomline"
+  fi
+fi
+
+if ! has_path "screenshots"; then
+  get_consent "Create ~/screenshots folder"
+  if has_consent; then
+    e_pending "Creating ~/screenshots folder"
+    mkdir -p ~/screenshots
+    test_path "screenshots"
+  fi
+fi
 
 # Dock
 get_consent "Autohide Dock"
@@ -12,7 +68,6 @@ if has_consent; then
   # VALIDATED
   e_pending "Autohiding Dock"
   defaults write com.apple.dock autohide -boolean true
-  killall Dock
 fi
 
 get_consent "Reduce dock auto hide animation"
@@ -20,7 +75,6 @@ if has_consent; then
   # VALIDATED
   e_pending "Reducing Dock auto hide animation"
   defaults write com.apple.dock autohide-time-modifier -float 0.25
-  killall Dock
 fi
 
 get_consent "Remove Dock Delay for Auto Hide & Auto-Show"
@@ -28,16 +82,52 @@ if has_consent; then
   # VALIDATED
   e_pending "Removing Dock delay"
   defaults write com.apple.dock autohide-delay -float 0
-  killall Dock
 fi
 
-get_consent "Set the icon size of Dock items to 63 pixels"
+get_consent "Set the icon size of Dock items to 48 pixels"
 if has_consent; then
   # VALIDATED
-  e_pending "Setting Dock icon size to 63 pixels"
-  defaults write com.apple.dock tilesize -int 63
-  killall Dock
+  e_pending "Setting Dock icon size to 48 pixels"
+  defaults write com.apple.dock tilesize -int 48
 fi
+
+get_consent "Disable Dock magnification"
+if has_consent; then
+  e_pending "Disabling Dock magnification"
+  defaults write com.apple.dock magnification -boolean false
+fi
+
+get_consent "Disable Recent Apps in Dock"
+if has_consent; then
+  e_pending "Disabling Recent Apps in Dock"
+  defaults write com.apple.dock show-recents -boolean false
+fi
+
+get_consent "Change App Minimization Effect"
+if has_consent; then
+  e_pending "Changing App Minimization Effect"
+  defaults write com.apple.dock mineffect -string "scale"
+fi
+
+get_consent "Dock - Remove all default app icons"
+if has_consent; then
+  e_pending "Removing all default app icons from Dock"
+  defaults write com.apple.dock persistent-apps -array
+fi
+
+get_consent "Dock - Don’t animate opening applications"
+if has_consent; then
+  e_pending "Disabling application opening animation"
+  defaults write com.apple.dock launchanim -boolean false
+fi
+
+get_consent "Dock - Make icons of hidden applications translucent"
+if has_consent; then
+  e_pending "Making icons of hidden applications translucent"
+  defaults write com.apple.dock showhidden -boolean true
+fi
+
+killall Dock
 
 # Finder
 get_consent "Display hidden Finder files/folders"
@@ -48,11 +138,23 @@ if has_consent; then
   killall Finder
 fi
 
+get_consent "Finder - Show filename extensions"
+if has_consent; then
+  e_pending "Showing filename extensions"
+  defaults write NSGlobalDomain AppleShowAllExtensions -boolean true
+fi
+
 get_consent "Default Finder view is Column"
 if has_consent; then
   # VALIDATED
   e_pending "Setting default Finder view to Column"
   defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+fi
+
+get_consent "Finder: disable window animations and Get Info animations"
+if has_consent; then
+  e_pending "Disabling Finder window animations"
+  defaults write com.apple.finder DisableAllAnimations -boolean true
 fi
 
 get_consent "Update other Finder settings"
@@ -110,6 +212,130 @@ if has_consent; then
   killall Finder
 fi
 
+get_consent "Finder - Display full POSIX path as window title"
+if has_consent; then
+  e_pending "Displaying full POSIX path as window title"
+  defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+fi
+
+get_consent "Finder - Show the ~/Library folder"
+if has_consent; then
+  e_pending "Showing the ~/Library folder"
+  chflags nohidden ~/Library
+fi
+
+get_consent "Finder - Show the /Volumes folder"
+if has_consent; then
+  e_pending "Showing the /Volumes folder"
+  sudo chflags nohidden /Volumes
+fi
+
+get_consent "Display folders on top in Desktop"
+if has_consent; then
+  e_pending "Displaying folders on top in Desktop"
+  defaults write com.apple.finder "_FXSortFoldersFirstOnDesktop" -bool "true"
+fi
+
+get_consent "Disable the warning when changing a file extension"
+if has_consent; then
+  e_pending "Disabling file extension warning"
+  defaults write com.apple.finder FXEnableExtensionChangeWarning -boolean false
+fi
+
+get_consent "Finder Search always searches current folder by default"
+if has_consent; then
+  e_pending "Setting Finder search to current folder"
+  defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+fi
+
+get_consent "Finder - Display quit option"
+if has_consent; then
+  e_pending "Displaying quit option"
+  defaults write com.apple.finder QuitMenuItem -bool true
+fi
+
+get_consent "Finder Show Status Bar"
+if has_consent; then
+  e_pending "Showing Finder status bar"
+  defaults write com.apple.finder ShowStatusBar -boolean true
+fi
+
+get_consent "Finder Show Path Bar"
+if has_consent; then
+  e_pending "Showing Finder path bar"
+  defaults write com.apple.finder ShowPathbar -boolean true
+fi
+
+get_consent "Finder Show Tab Bar"
+if has_consent; then
+  e_pending "Showing Finder tab bar"
+  defaults write com.apple.finder ShowTabView -boolean true
+fi
+
+get_consent "Always expand Save Panel by default"
+if has_consent; then
+  e_pending "Expanding Save Panel by default"
+  defaults write -g NSNavPanelExpandedStateForSaveMode -boolean true
+fi
+
+get_consent "Default save location is Disk, not iCloud"
+if has_consent; then
+  e_pending "Setting default save location to Disk"
+  defaults write -g NSDocumentSaveNewDocumentsToCloud -boolean false
+fi
+
+get_consent "Disable the warning before emptying the Trash"
+if has_consent; then
+  e_pending "Disabling Trash empty warning"
+  defaults write com.apple.finder WarnOnEmptyTrash -boolean false
+fi
+
+get_consent "Keep folders on top when sorting by name"
+if has_consent; then
+  e_pending "Keeping folders on top when sorting by name"
+  defaults write com.apple.finder _FXSortFoldersFirst -boolean true
+fi
+
+get_consent "Show icon in title bar"
+if has_consent; then
+  e_pending "Showing icon in title bar"
+  defaults write com.apple.universalaccess "showWindowTitlebarIcons" -bool "true"
+fi
+
+# Power
+get_consent "Enable High Power on Power Adapter"
+if has_consent; then
+  e_pending "Enabling High Power on Power Adapter"
+
+  sudo defaults write com.apple.powerprofile -dict AC\ Power -int 2
+  sudo killall powerd
+fi
+
+get_consent "Start screensaver after 2 minutes"
+if has_consent; then
+  e_pending "Setting screensaver to 2 minutes"
+  defaults -currentHost write com.apple.screensaver idleTime -int 120
+fi
+
+get_consent "Turn display off on battery when inactive after 2 minutes"
+if has_consent; then
+  e_pending "Setting display off to 2 minutes"
+  sudo pmset -b displaysleep 2
+fi
+
+get_consent "Require password immediately after sleep or screen saver begins"
+if has_consent; then
+  e_pending "Requiring password immediately after sleep or screen saver begins"
+  defaults write com.apple.screensaver askForPassword -int 1
+  defaults write com.apple.screensaver askForPasswordDelay -int 0
+fi
+
+get_consent "Turn display off on power adapter after 1 hour"
+if has_consent; then
+  e_pending "Setting display off to 1 hour"
+  sudo pmset -c displaysleep 60
+fi
+
 # Keyboard
 get_consent "Enable Function Keys"
 if has_consent; then
@@ -118,72 +344,27 @@ if has_consent; then
   defaults write -g com.apple.keyboard.fnState -bool true
 fi
 
+get_consent "Enable Keyboard Navigation"
+if has_consent; then
+  e_pending "Enabling Keyboard Navigation"
+  defaults write -g AppleKeyboardUIMode -int 2
+fi
+
+get_consent "Keyboard - Automatically illuminate built-in MacBook keyboard in low light"
+if has_consent; then
+  e_pending "Automatically illuminating built-in MacBook keyboard in low light"
+  defaults write com.apple.BezelServices kDim -bool true
+
+  # Turn off keyboard illumination after 5 minutes of inactivity
+  defaults write com.apple.BezelServices kDimTime -int 300
+fi
+
 # Keyboard Shortcuts
 get_consent "Set Custom Screenshot Keyboard Shortcuts"
 if has_consent; then
+  # VALIDATED
   e_pending "Setting Custom Screenshot Keyboard Shortcuts..."
 
-  # Save picture of screen as a file (^⇧$4)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 19 '<dict>
-    <key>enabled</key><true/>
-    <key>value</key>
-    <dict>
-        <key>parameters</key>
-        <array>
-            <integer>52</integer>
-            <integer>21</integer>
-            <integer>131072</integer>
-        </array>
-        <key>type</key><string>standard</string>
-    </dict>
-</dict>'
-
-  # Save picture of selected area as a file (^⇧$3)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 20 '<dict>
-    <key>enabled</key><true/>
-    <key>value</key>
-    <dict>
-        <key>parameters</key>
-        <array>
-            <integer>51</integer>
-            <integer>20</integer>
-            <integer>131072</integer>
-        </array>
-        <key>type</key><string>standard</string>
-    </dict>
-</dict>'
-
-  # Copy picture of screen to clipboard (⇧$4)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 21 '<dict>
-    <key>enabled</key><true/>
-    <key>value</key>
-    <dict>
-        <key>parameters</key>
-        <array>
-            <integer>52</integer>
-            <integer>21</integer>
-            <integer>131072</integer>
-        </array>
-        <key>type</key><string>standard</string>
-    </dict>
-</dict>'
-
-  # Copy picture of selected area to clipboard (⇧$3)
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 22 '<dict>
-    <key>enabled</key><true/>
-    <key>value</key>
-    <dict>
-        <key>parameters</key>
-        <array>
-            <integer>51</integer>
-            <integer>20</integer>
-            <integer>131072</integer>
-        </array>
-        <key>type</key><string>standard</string>
-    </dict>
-</dict>'
-
-  # Screenshot and recording options (⇧$5)
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 184 '<dict>
     <key>enabled</key><true/>
     <key>value</key>
@@ -192,7 +373,63 @@ if has_consent; then
         <array>
             <integer>53</integer>
             <integer>23</integer>
-            <integer>131072</integer>
+            <integer>1179648</integer>
+        </array>
+        <key>type</key><string>standard</string>
+    </dict>
+</dict>'
+
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 28 '<dict>
+    <key>enabled</key><true/>
+    <key>value</key>
+    <dict>
+        <key>parameters</key>
+        <array>
+            <integer>52</integer>
+            <integer>21</integer>
+            <integer>1441792</integer>
+        </array>
+        <key>type</key><string>standard</string>
+    </dict>
+</dict>'
+
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 29 '<dict>
+    <key>enabled</key><true/>
+    <key>value</key>
+    <dict>
+        <key>parameters</key>
+        <array>
+            <integer>52</integer>
+            <integer>21</integer>
+            <integer>1179648</integer>
+        </array>
+<key>type</key><string>standard</string>
+    </dict>
+</dict>'
+
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 30 '<dict>
+    <key>enabled</key><true/>
+    <key>value</key>
+    <dict>
+        <key>parameters</key>
+        <array>
+            <integer>51</integer>
+            <integer>20</integer>
+            <integer>1441792</integer>
+        </array>
+        <key>type</key><string>standard</string>
+    </dict>
+</dict>'
+
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 31 '<dict>
+    <key>enabled</key><true/>
+    <key>value</key>
+    <dict>
+        <key>parameters</key>
+        <array>
+            <integer>51</integer>
+            <integer>20</integer>
+            <integer>1179648</integer>
         </array>
         <key>type</key><string>standard</string>
     </dict>
@@ -224,7 +461,7 @@ if has_consent; then
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 '<dict><key>enabled</key><false/></dict>'
 
   # Enable Switch to Desktop shortcuts
-
+  # VALIDATED - REQUIRES RESTART
   # Desktop 1 (^⌥1)
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 118 '<dict>
     <key>enabled</key><true/>
@@ -247,7 +484,7 @@ if has_consent; then
     <dict>
         <key>parameters</key>
         <array>
-            <integer>49</integer>
+            <integer>50</integer>
             <integer>19</integer>
             <integer>786432</integer>
         </array>
@@ -287,16 +524,17 @@ if has_consent; then
 
   # Restart to apply changes
   killall SystemUIServer
+
+  e_message "Mission Control shortcuts updated successfully. You need to log out and back in for changes to take effect."
 fi
 
 # Text Replacements
 get_consent "Add custom text replacements"
 if has_consent; then
-  # NOT WORKING
+  # VALIDATED
   e_pending "Adding custom text replacements"
 
   # Check if text replacement exists before adding
-  # NOT WORKING
   if ! defaults read -g NSUserDictionaryReplacementItems | grep -q "varun.shoor@gmail.com"; then
     defaults write -g NSUserDictionaryReplacementItems -array-add '{
       on = 1;
@@ -354,6 +592,26 @@ if has_consent; then
   defaults write -g NSAutomaticPeriodSubstitutionEnabled -boolean false
 fi
 
+# Screenshots
+get_consent "Save screenshots to ~/screenshots"
+if has_consent; then
+  e_pending "Saving screenshots to ~/screenshots"
+  defaults write com.apple.screencapture location -string "${HOME}/screenshots"
+  killall SystemUIServer
+fi
+
+get_consent "Setting screenshot format to PNG"
+if has_consent; then
+  e_pending "Setting screenshot format to PNG"
+  defaults write com.apple.screencapture type -string "png"
+fi
+
+get_consent "Disable shadow in screenshots"
+if has_consent; then
+  e_pending "Disabling shadow in screenshots"
+  defaults write com.apple.screencapture disable-shadow -boolean true
+fi
+
 # Safari
 get_consent "Don't open files in Safari after downloading"
 if has_consent; then
@@ -372,6 +630,7 @@ if has_consent; then
   e_pending "Showing Develop menu in Safari"
   sudo defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
   sudo defaults write com.apple.Safari IncludeDevelopMenu -boolean true
+  sudo defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true
   sudo defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
   sudo defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
 fi
@@ -403,36 +662,30 @@ if has_consent; then
   # Set homepage to about:blank
   sudo defaults write com.apple.Safari HomePage -string "about:blank"
 
-  # Set history removal to after two weeks (1209600 seconds)
-  sudo defaults write com.apple.Safari HistoryAgeInDaysLimit -int 14
+  # Set history removal to after one week
+  sudo defaults write com.apple.Safari HistoryAgeInDaysLimit -int 7
 
   # Set new windows and tabs to open with empty page
   # 0 = Top Sites
   # 1 = Homepage
   # 4 = Empty Page
   # 5 = Same Page
-  sudo defaults write com.apple.Safari NewWindowBehavior -int 4
-  sudo defaults write com.apple.Safari NewTabBehavior -int 4
+  sudo defaults write com.apple.Safari NewWindowBehavior -int 1
+  sudo defaults write com.apple.Safari NewTabBehavior -int 1
 
   # Set Safari to open with windows from last session
   # 1 = New Window
   # 2 = New Private Window
   # 3 = All windows from last session
   sudo defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
+  sudo defaults write com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool false
 
   # Prevent Safari from opening 'safe' files automatically after downloading
   sudo defaults write com.apple.Safari AutoOpenSafeDownloads -boolean false
 
-  # Enable the Develop menu and the Web Inspector in Safari
-  sudo defaults write com.apple.Safari IncludeDevelopMenu -boolean true
-  sudo defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -boolean true
-  sudo defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -boolean true
-
-  # Add a context menu item for showing the Web Inspector in web views
-  sudo defaults write NSGlobalDomain WebKitDeveloperExtras -boolean true
-
   # Update Safari settings
   sudo defaults write com.apple.Safari ShowFavoritesBar -boolean false
+  sudo defaults write com.apple.Safari "ShowFavoritesBar-v2" -boolean false
   sudo defaults write com.apple.Safari ShowSidebarInTopSites -boolean false
   sudo defaults write com.apple.Safari ShowSidebarInNewWindows -boolean false
   sudo defaults write com.apple.Safari ShowSidebar -boolean false
@@ -441,56 +694,51 @@ if has_consent; then
   sudo defaults write com.apple.Safari ShowFullURLInSmartSearchField -boolean true
   sudo defaults write com.apple.Safari SuppressSearchSuggestions -boolean true
   sudo defaults write com.apple.Safari UniversalSearchEnabled -boolean false
+
+  # Disable Auto Fill Passwords
+  sudo defaults write com.apple.Safari AutoFillPasswords --boolean false
+
+  # Disable Safari’s thumbnail cache for History and Top Sites
+  sudo defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
+
+  # Don’t allow websites to ask for permission to send push notifications
+  sudo defaults write com.apple.Safari CanPromptForPushNotifications -boolean false
+
   # Restart Safari for changes to take effect
   killall Safari
 fi
 
-get_consent "Disable the warning when changing a file extension"
+# Activity Monitor
+get_consent "Activity Monitor - Show all processes in Activity Monitor"
 if has_consent; then
-  e_pending "Disabling file extension warning"
-  defaults write com.apple.finder FXEnableExtensionChangeWarning -boolean false
+  e_pending "Showing all processes in Activity Monitor"
+  defaults write com.apple.ActivityMonitor ShowCategory -int 0
 fi
 
-get_consent "Finder Search always searches current folder by default"
+get_consent "Activity Monitor - Show the main window when launching Activity Monitor"
 if has_consent; then
-  e_pending "Setting Finder search to current folder"
-  defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+  e_pending "Showing main window when launching Activity Monitor"
+  defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
 fi
 
-get_consent "Finder Show Status Bar"
+# Photos
+get_consent "Photos - Prevent Photos from opening automatically when devices are plugged in"
 if has_consent; then
-  e_pending "Showing Finder status bar"
-  defaults write com.apple.finder ShowStatusBar -boolean true
+  e_pending "Preventing Photos from opening automatically"
+  defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 fi
 
-get_consent "Finder Show Path Bar"
+# Display
+get_consent "Display - Reduce Transparency"
 if has_consent; then
-  e_pending "Showing Finder path bar"
-  defaults write com.apple.finder ShowPathbar -boolean true
+  e_pending "Reducing Transparency"
+  defaults write com.apple.universalaccess reduceTransparency -bool true
 fi
 
-get_consent "Finder Show Tab Bar"
+get_consent "Display - Disable Window Animation"
 if has_consent; then
-  e_pending "Showing Finder tab bar"
-  defaults write com.apple.finder ShowTabView -boolean true
-fi
-
-get_consent "Always expand Save Panel by default"
-if has_consent; then
-  e_pending "Expanding Save Panel by default"
-  defaults write -g NSNavPanelExpandedStateForSaveMode -boolean true
-fi
-
-get_consent "Default save location is Disk, not iCloud"
-if has_consent; then
-  e_pending "Setting default save location to Disk"
-  defaults write -g NSDocumentSaveNewDocumentsToCloud -boolean false
-fi
-
-get_consent "Disable the warning before emptying the Trash"
-if has_consent; then
-  e_pending "Disabling Trash empty warning"
-  defaults write com.apple.finder WarnOnEmptyTrash -boolean false
+  e_pending "Disabling Window Animation"
+  defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 fi
 
 # Printer
@@ -539,7 +787,7 @@ if has_consent; then
 
   # Include date in the menu bar (System Preferences | Date & Time | Clock)
   # https://apple.stackexchange.com/questions/180847/wrong-date-format-in-the-menu-bar
-  defaults write com.apple.menuextra.clock "DateFormat" 'EEE MMM d  h:mm a'
+  defaults write 'com.apple.menuextra.clock' 'DateFormat' -string 'EEE MMM d  h:mm:ss a'
 fi
 
 get_consent "Show Volume in menu bar"
@@ -556,7 +804,7 @@ get_consent "Update battery settings in menu bar"
 if has_consent; then
   e_pending "Updating battery settings in menu bar"
   # Show battery percentage in menu bar
-  defaults write com.apple.menuextra.battery ShowPercent -bool true # NOT WORKING
+  defaults write com.apple.menuextra.battery ShowPercent -string "YES"
 
   # VALIDATED
   # Show battery in menu bar
@@ -571,6 +819,12 @@ if has_consent; then
   # VALIDATED
   e_pending "Disabling Spotlight in Menu Bar"
   defaults write com.apple.Spotlight MenuItemHidden -int 1
+fi
+
+get_consent "Menu Bar - Disable Transparency"
+if has_consent; then
+  e_pending "Disabling Menu Bar Transparency"
+  defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
 fi
 
 get_consent "Restart menu bar"
@@ -624,13 +878,6 @@ if has_consent; then
   killall Dock
 fi
 
-get_consent "Disable Dock magnification"
-if has_consent; then
-  e_pending "Disabling Dock magnification"
-  defaults write com.apple.dock magnification -boolean false
-  killall Dock
-fi
-
 get_consent "Don't load remote content in Mail by default"
 if has_consent; then
   e_pending "Disabling remote content in Mail"
@@ -659,39 +906,23 @@ fi
 get_consent "Enable group windows by application"
 if has_consent; then
   e_pending "Enabling group windows by application"
-  defaults write -g AppleWindowTabbingMode -string "always"
+  defaults write com.apple.dock "expose-group-apps" -bool "true"
 fi
 
-get_consent "Start screensaver after 2 minutes"
+get_consent "Disable Separate Spaces for Displays"
 if has_consent; then
-  e_pending "Setting screensaver to 2 minutes"
-  defaults -currentHost write com.apple.screensaver idleTime -int 120
+  e_pending "Disabling Separate Spaces for Displays"
+  defaults write com.apple.spaces spans-displays -bool false
 fi
 
-get_consent "Turn display off on battery when inactive after 2 minutes"
-if has_consent; then
-  e_pending "Setting display off to 2 minutes"
-  sudo pmset -b displaysleep 2
-fi
-
-get_consent "Require password immediately after sleep or screen saver begins"
-if has_consent; then
-  e_pending "Requiring password immediately after sleep or screen saver begins"
-  defaults write com.apple.screensaver askForPassword -int 1
-  defaults write com.apple.screensaver askForPasswordDelay -int 0
-fi
-
-get_consent "Turn display off on power adapter after 1 hour"
-if has_consent; then
-  e_pending "Setting display off to 1 hour"
-  sudo pmset -c displaysleep 60
-fi
-
+# Accessibility
 get_consent "Enable scroll gesture with modifier key"
 if has_consent; then
   e_pending "Enabling scroll gesture with modifier key"
   sudo defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
-  sudo defaults write com.apple.universalaccess closeViewModifierMask -int 262144 # Control key
+  sudo defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
+  sudo defaults write com.apple.universalaccess closeViewModifierMask -int 262144    # Control key
+  sudo defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true # Follow the keyboard focus while zoomed in
 
   # Set zoom style to full screen
   sudo defaults write com.apple.universalaccess closeViewZoomMode -int 0
@@ -709,25 +940,39 @@ if has_consent; then
   defaults write -g AppleReduceDesktopTinting -bool true
 fi
 
+# Mouse
+get_consent "Set Mouse Tracking Speed to Fast"
+if has_consent; then
+  e_pending "Setting Mouse Tracking Speed to Fast"
+  defaults write -g com.apple.mouse.scaling -float 3.0
+fi
+
 # Trackpad
 get_consent "Enable trackpad for dragging"
 if has_consent; then
   e_pending "Enabling trackpad for dragging"
-  defaults write com.apple.AppleMultitouchTrackpad Dragging -bool true
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -bool true
+  defaults write com.apple.AppleMultitouchTrackpad Dragging -int 1
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -int 1
 
   # Set dragging style (without drag lock)
-  defaults write com.apple.AppleMultitouchTrackpad DragLock -bool false
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -bool false
+  defaults write com.apple.AppleMultitouchTrackpad DragLock -int 1
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad DragLock -int 1
 fi
 
 get_consent "Enable Trackpad Gestures"
 if has_consent; then
   e_pending "Enabling Trackpad Gestures"
 
+  # Disabling Three Finger Horizontal Swipe
+  defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerHorizSwipeGesture -int 0
+
+  # Disable Three Finger Vertical Swipe
+  defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerVertSwipeGesture -int 0
+
   # Enable Show Desktop gesture (Spread with thumb and three fingers)
   defaults write com.apple.dock showDesktopGestureEnabled -bool true
   defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerSpreadGesture -int 2
+
   # Configure Mission Control gesture (Swipe Up with Four Fingers)
   defaults write com.apple.dock showMissionControlGestureEnabled -bool true
   defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerVertSwipeGesture -int 2
@@ -738,8 +983,8 @@ fi
 get_consent "Tap to click"
 if has_consent; then
   e_pending "Enabling tap to click in the trackpad"
-  defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
-  sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+  defaults write com.apple.AppleMultitouchTrackpad Clicking -int 1
+  sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -int 1
   sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
   sudo defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 fi
@@ -747,39 +992,23 @@ fi
 get_consent "Enable Three Finger Drag"
 if has_consent; then
   e_pending "Enabling Three Finger Drag"
-  defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
-
-  # Also need to enable dragging itself
-  defaults write com.apple.AppleMultitouchTrackpad Dragging -bool true
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Dragging -bool true
+  defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -int 1
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -int 1
 
   # Restart trackpad driver to apply changes
   killall Dock
-fi
-
-get_consent "Disable local Time Machine backups"
-if has_consent; then
-  e_pending "Disabling local Time Machine backups"
-  sudo tmutil disablelocal
-fi
-
-get_consent "Check for software updates daily, not just once per week"
-if has_consent; then
-  e_pending "Checking for software updates daily"
-  defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
-fi
-
-get_consent "Set Mouse Tracking Speed to Fast"
-if has_consent; then
-  e_pending "Setting Mouse Tracking Speed to Fast"
-  defaults write -g com.apple.mouse.scaling -float 3.0
 fi
 
 get_consent "Set Trackpad Tracking Speed to Fast"
 if has_consent; then
   e_pending "Setting Trackpad Tracking Speed to Fast"
   defaults write -g com.apple.trackpad.scaling -float 3.0
+fi
+
+get_consent "Check for software updates daily, not just once per week"
+if has_consent; then
+  e_pending "Checking for software updates daily"
+  defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
 fi
 
 get_consent "Enabling subpixel font rendering on non-Apple LCDs"
@@ -798,12 +1027,6 @@ get_consent "Prevent Time Machine from prompting to use new hard drives as backu
 if has_consent; then
   e_pending "Preventing Time Machine from prompting to use new hard drives as backup volume"
   defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -boolean true
-fi
-
-get_consent "Setting screenshot format to PNG"
-if has_consent; then
-  e_pending "Setting screenshot format to PNG"
-  defaults write com.apple.screencapture type -string "png"
 fi
 
 get_consent "Disabling OS X Gate Keeper"
@@ -830,24 +1053,30 @@ if has_consent; then
   defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 fi
 
-if ! has_path "dev"; then
-  get_consent "Create ~/dev folder"
-  if has_consent; then
-    e_pending "Creating ~/dev folder"
-    mkdir -p ~/dev
-    test_path "dev"
-  fi
+get_consent "Update Fonts for TextEdit"
+if has_consent; then
+  e_pending "Setting TextEdit fonts"
+
+  defaults write com.apple.TextEdit NSFixedPitchFont -string "BerkeleyMonoNFM-Regular"
+  defaults write com.apple.TextEdit NSFixedPitchFontSize -int 18
+
+  defaults write com.apple.TextEdit NSFont -string "BerkeleyMonoNFM-Regular"
+  defaults write com.apple.TextEdit NSFontSize -int 18
 fi
 
-if ! has_path "sandbox"; then
-  get_consent "Create ~/sandbox folder"
-  if has_consent; then
-    e_pending "Creating ~/sandbox folder"
-    mkdir -p ~/sandbox
-    test_path "sandbox"
-  fi
+get_consent "Disable Spell Check in TextEdit"
+if has_consent; then
+  e_pending "Disabling Spell Check in TextEdit"
+  defaults write com.apple.TextEdit CorrectSpellingAutomatically -boolean false
 fi
 
+get_consent "Disable Smart Quotes in TextEdit"
+if has_consent; then
+  e_pending "Disabling Smart Quotes in TextEdit"
+  defaults write com.apple.TextEdit SmartQuotes -boolean false
+fi
+
+# Commands
 if ! has_command "xcode-select"; then
   e_pending "Installing xcode-select (CLI tools)"
   xcode-select --install
@@ -866,6 +1095,12 @@ if ! has_command "brew"; then
   brew doctor
   brew tap homebrew/cask-fonts
   test_command "brew"
+else
+  # upgrade homebrew to latest version
+  e_pending "Homebrew already installed"
+  e_pending "Upgrading homebrew..."
+  brew update
+  brew upgrade
 fi
 
 # ------------------------------------------------------------------------------
