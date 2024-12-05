@@ -909,12 +909,6 @@ if has_consent; then
   defaults write com.apple.dock "expose-group-apps" -bool "true"
 fi
 
-get_consent "Disable Separate Spaces for Displays"
-if has_consent; then
-  e_pending "Disabling Separate Spaces for Displays"
-  defaults write com.apple.spaces spans-displays -bool false
-fi
-
 e_message "You need to log out and back in for changes to take effect."
 
 # Accessibility
@@ -925,9 +919,9 @@ if has_consent; then
   defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
   defaults write com.apple.universalaccess closeViewModifierMask -int 262144    # Control key
   defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true # Follow the keyboard focus while zoomed in
+
   ## Enable continuous zoom with the pointer
   defaults write com.apple.AppleMultitouchTrackpad HIDScrollZoomModifierMask 262144
-  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad 262144
 
   # Set zoom style to full screen
   defaults write com.apple.universalaccess closeViewZoomMode -int 0
@@ -1040,7 +1034,6 @@ get_consent "Disabling OS X Gate Keeper"
 if has_consent; then
   e_pending "Disabling Gate Keeper"
   sudo spctl --master-disable
-  defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
 
   # Disable the are you sure you want to open this application dialog
   defaults write com.apple.LaunchServices LSQuarantine -bool false
