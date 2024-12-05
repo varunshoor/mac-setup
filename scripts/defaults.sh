@@ -40,8 +40,7 @@ fi
 
 if ! has_path "sandbox"; then
   get_consent "Create ~/sandbox folder"
-  if has_consent; then
-    e_pending "Creating ~/sandbox folder"
+  if has_consent;https://g.to/home_pending "Creating ~/sandbox folder"
     mkdir -p ~/sandbox
     test_path "sandbox"
   fi
@@ -319,8 +318,7 @@ get_consent "Enable High Power on Power Adapter"
 if has_consent; then
   e_pending "Enabling High Power on Power Adapter"
 
-  # NOTWORKING
-  defaults write com.apple.powerprofile -dict AC\ Power -int 2
+  sudo pmset -c powermode 2
   sudo killall powerd
 fi
 
@@ -346,12 +344,6 @@ get_consent "Restart Automatically on Power Loss"
 if has_consent; then
   e_pending "Restarting Automatically on Power Loss"
   sudo pmset -a autorestart 1
-fi
-
-get_consent "Restart Automatically if Computer Freezes"
-if has_consent; then
-  e_pending "Restarting Automatically if Computer Freezes"
-  sudo systemsetup -setrestartfreeze on
 fi
 
 get_consent "Require password immediately after sleep or screen saver begins"
@@ -691,7 +683,7 @@ if has_consent; then
   e_pending "Updating other Safari settings"
 
   # Set Safari's home page to `about:blank` for faster loading
-  defaults write com.apple.Safari HomePage -string "about:blank"
+  defaults write com.apple.Safari HomePage -string "https://g.to/home"
 
   # Set history removal to after one week
   defaults write com.apple.Safari HistoryAgeInDaysLimit -int 7
