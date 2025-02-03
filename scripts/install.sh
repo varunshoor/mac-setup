@@ -9,8 +9,8 @@ e_message "Starting mac-setup"
 # ------------------------------------------------------------------------------
 
 source defaults.sh
-source tools.sh
-source casks.sh
+source brew.sh
+source dock.sh
 source optimizations.sh
 source summary.sh
 
