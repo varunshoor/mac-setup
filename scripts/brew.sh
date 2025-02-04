@@ -38,6 +38,8 @@ install_formula "certbot"     # ssl cert cli
 install_formula "openjdk"     # java
 install_formula "openssh"     # ssh
 install_formula "zsh"         # shell
+install_formula "curl"
+install_formula "tmux"
 install_formula "readline"
 install_formula "sqlite3"
 install_formula "xz"
@@ -47,7 +49,7 @@ install_formula "zlib"
 install_formula "mas"     # app store cli
 install_formula "stats"   # stats
 install_formula "itsycal" # calendar
-install_formula "defbro"  # browser cli
+install_formula "jwbargsten/misc/defbro"  # browser cli
 install_formula "trash"   # trash cli
 
 # Git
