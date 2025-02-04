@@ -32,25 +32,24 @@ e_message "Installing Homebrew Formulae"
 install_formula "gcc"         # gnu compiler
 install_formula "coreutils"   # core gnu utils
 install_formula "git"         # version control
-install_formula "ffmpeg"      # media cli
-install_formula "imagemagick" # image cli
-install_formula "certbot"     # ssl cert cli
-install_formula "openjdk"     # java
+install_formula "xz"
+install_formula "zlib"
 install_formula "openssh"     # ssh
 install_formula "zsh"         # shell
 install_formula "curl"
 install_formula "tmux"
 install_formula "readline"
+install_formula "certbot"     # ssl cert cli
+install_formula "openjdk"     # java
 install_formula "sqlite3"
-install_formula "xz"
-install_formula "zlib"
+install_formula "ffmpeg"      # media cli
+install_formula "imagemagick" # image cli
 
 # Mac
 install_formula "mas"     # app store cli
 install_formula "stats"   # stats
 install_formula "itsycal" # calendar
 install_formula "jwbargsten/misc/defbro"  # browser cli
-install_formula "trash"   # trash cli
 
 # Git
 install_formula "gh"        # github cli
@@ -80,7 +79,6 @@ install_formula "eza"           # improved ls
 install_formula "htop"          # top cli
 install_formula "procs"         # ps cli
 install_formula "ncdu"          # du cli
-install_formula "tlrc"          # tldr cli
 install_formula "sad"           # search and replace cli
 install_formula "ripgrep"       # grep cli
 install_formula "tree"          # tree cli
@@ -98,19 +96,18 @@ install_formula "zplug"      # zsh plugin manager
 install_formula "oh-my-posh" # posh theme
 
 # Audio & Video
-install_formula "youtube-dl" # youtube cli
 install_formula "handbrake"  # video transcoder
 
 # DB
 install_formula "atlas" # db toolkit
-install_formula "turso" # sqlite db
+install_formula "tursodatabase/tap/turso" # sqlite db
 
 # Docker
 install_formula "lazydocker" # docker cli
 
 # Kubernetes
 install_formula "k9s"      # k8s cli
-install_formula "kdash"    # k8s dashboard
+install_formula "kdash-rs/kdash/kdash"    # k8s dashboard
 install_formula "kubectx"  # k8s ctx switcher
 install_formula "minikube" # k8s cli
 install_formula "eksctl"   # eks cli
@@ -156,7 +153,7 @@ install_formula "php" # php lang
 install_formula "pulumi" # infra as code
 
 # CSV & Data
-install_formula "visidata"    # csv cli
+install_formula "saulpw/vd/visidata"    # csv cli
 install_formula "tidy-viewer" # csv cli
 install_formula "octosql"     # sql cli
 
@@ -176,13 +173,12 @@ e_message "Installing Homebrew Casks"
 install_cask "raycast"                       # productivity app
 install_cask "slack"                         # chat app
 install_cask "spotify"                       # music app
-install_cask "yubico-yubikey-manager"        # yubikey manager
 install_cask "zoom"                          # video conferencing
 install_cask "google-chrome"                 # web browser
 install_cask "google-drive"                  # cloud storage
 install_cask "discord"                       # chat app
 install_cask "gpg-suite"                     # gpg keychain
-install_cash "figma"                         # design app
+install_cask "figma"                         # design app
 install_cask "1password"                     # password manager
 install_cask "1password-cli"                 # password manager cli
 install_cask "ghostty"                       # terminal app
@@ -222,14 +218,12 @@ install_cask "loom"                          # video recording
 install_cask "little-snitch"                 # network monitor
 install_cask "obs"                           # streaming app
 install_cask "outline-manager"               # vpn
-install_cask "via"                           # keyboard manager
 install_cask "visual-studio-code"            # code editor
 install_cask "tableplus"                     # database manager
 install_cask "microsoft-office"              # office suite
 install_cask "logi-options+"                 # mouse manager
 install_cask "homerow"                       # keyboard manager
 install_cask "opal-composer"                 # camera app
-install_cask "mysides"                       # finder cli
 install_cask "font-jetbrains-mono-nerd-font" # font
 install_cask "mac-mouse-fix"                 # mouse manager
 install_cask "neohtop"                       # htop cli
