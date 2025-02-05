@@ -909,6 +909,13 @@ if has_consent; then
   defaults write com.apple.dock "expose-group-apps" -bool "true"
 fi
 
+get_consent "Disable animation when switching spaces"
+if has_consent; then
+  e_pending "Disabling space switching animation"
+  defaults write com.apple.dock expose-animation-duration -float 0.1
+  killall Dock
+fi
+
 e_message "You need to log out and back in for changes to take effect."
 
 # Accessibility
