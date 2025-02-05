@@ -48,7 +48,6 @@ install_formula "imagemagick" # image cli
 # Mac
 install_formula "mas"     # app store cli
 install_formula "stats"   # stats
-install_formula "itsycal" # calendar
 install_formula "jwbargsten/misc/defbro"  # browser cli
 
 # Git
@@ -193,7 +192,6 @@ install_cask "signal"                        # chat app
 install_cask "docker"                        # containerization
 install_cask "dropbox"                       # cloud storage
 install_cask "bartender"                     # menu bar manager
-install_cask "meetingbar"                    # calendar app
 install_cask "notion"                        # productivity app
 install_cask "notion-calendar"               # calendar app
 install_cask "superhuman"                    # email app
@@ -226,7 +224,6 @@ install_cask "homerow"                       # keyboard manager
 install_cask "opal-composer"                 # camera app
 install_cask "font-jetbrains-mono-nerd-font" # font
 install_cask "mac-mouse-fix"                 # mouse manager
-install_cask "neohtop"                       # htop cli
 install_cask "bruno"                         # api testing
 
 # ------------------------------------------------------------------------------
