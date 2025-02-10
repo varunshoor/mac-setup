@@ -116,6 +116,7 @@ install_formula "doctl" # digital ocean cli
 
 # JS & TS
 install_formula "fnm" # node version manager
+install_formula "pnpm" # node package manager
 
 # Golang
 install_formula "go"            # go lang
