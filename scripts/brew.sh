@@ -39,6 +39,7 @@ install_formula "zsh"         # shell
 install_formula "curl"
 install_formula "tmux"
 install_formula "readline"
+install_formula "fzf"
 install_formula "certbot"     # ssl cert cli
 install_formula "openjdk"     # java
 install_formula "sqlite3"
