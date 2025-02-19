@@ -29,27 +29,27 @@ e_message "Installing Homebrew Formulae"
 # ------------------------------------------------------------------------------
 
 # Core
-install_formula "gcc"         # gnu compiler
-install_formula "coreutils"   # core gnu utils
-install_formula "git"         # version control
+install_formula "gcc"       # gnu compiler
+install_formula "coreutils" # core gnu utils
+install_formula "git"       # version control
 install_formula "xz"
 install_formula "zlib"
-install_formula "openssh"     # ssh
-install_formula "zsh"         # shell
+install_formula "openssh" # ssh
+install_formula "zsh"     # shell
 install_formula "curl"
 install_formula "tmux"
 install_formula "readline"
 install_formula "fzf"
-install_formula "certbot"     # ssl cert cli
-install_formula "openjdk"     # java
+install_formula "certbot" # ssl cert cli
+install_formula "openjdk" # java
 install_formula "sqlite3"
 install_formula "ffmpeg"      # media cli
 install_formula "imagemagick" # image cli
 
 # Mac
-install_formula "mas"     # app store cli
-install_formula "stats"   # stats
-install_formula "jwbargsten/misc/defbro"  # browser cli
+install_formula "mas"                    # app store cli
+install_formula "stats"                  # stats
+install_formula "jwbargsten/misc/defbro" # browser cli
 
 # Git
 install_formula "gh"        # github cli
@@ -96,27 +96,27 @@ install_formula "zplug"      # zsh plugin manager
 install_formula "oh-my-posh" # posh theme
 
 # Audio & Video
-install_formula "handbrake"  # video transcoder
+install_formula "handbrake" # video transcoder
 
 # DB
-install_formula "atlas" # db toolkit
+install_formula "atlas"                   # db toolkit
 install_formula "tursodatabase/tap/turso" # sqlite db
 
 # Docker
 install_formula "lazydocker" # docker cli
 
 # Kubernetes
-install_formula "k9s"      # k8s cli
-install_formula "kdash-rs/kdash/kdash"    # k8s dashboard
-install_formula "kubectx"  # k8s ctx switcher
-install_formula "minikube" # k8s cli
-install_formula "eksctl"   # eks cli
+install_formula "k9s"                  # k8s cli
+install_formula "kdash-rs/kdash/kdash" # k8s dashboard
+install_formula "kubectx"              # k8s ctx switcher
+install_formula "minikube"             # k8s cli
+install_formula "eksctl"               # eks cli
 
 # Cloud
 install_formula "doctl" # digital ocean cli
 
 # JS & TS
-install_formula "fnm" # node version manager
+install_formula "fnm"  # node version manager
 install_formula "pnpm" # node package manager
 
 # Golang
@@ -154,9 +154,9 @@ install_formula "php" # php lang
 install_formula "pulumi" # infra as code
 
 # CSV & Data
-install_formula "saulpw/vd/visidata"    # csv cli
-install_formula "tidy-viewer" # csv cli
-install_formula "octosql"     # sql cli
+install_formula "saulpw/vd/visidata" # csv cli
+install_formula "tidy-viewer"        # csv cli
+install_formula "octosql"            # sql cli
 
 # YAML
 install_formula "yq" # yaml cli
