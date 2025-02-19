@@ -139,6 +139,12 @@ if has_consent; then
   defaults write com.apple.dock showhidden -boolean true
 fi
 
+get_consent "Drag Windows with Ctrl + Cmd"
+if has_consent; then
+  e_pending "Enabling dragging of windows using gesture"
+  defaults write -g NSWindowShouldDragOnGesture -bool true
+fi
+
 killall Dock
 
 # Finder
