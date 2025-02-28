@@ -100,6 +100,7 @@ install_formula "handbrake" # video transcoder
 
 # DB
 install_formula "atlas"                   # db toolkit
+install_formula "harlequin"               # db cli
 install_formula "tursodatabase/tap/turso" # sqlite db
 
 # Docker
