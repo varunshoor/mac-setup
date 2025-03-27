@@ -86,6 +86,7 @@ install_formula "nnn"           # file manager
 install_formula "prettyping"    # ping cli
 install_formula "yazi"          # improved file manager
 install_formula "watchman"      # file watcher
+install_formula "watchexec"     # file watcher (better)
 install_formula "wget"          # file download cli
 install_formula "tealdeer"      # tldr cli
 
