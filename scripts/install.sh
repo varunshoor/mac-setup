@@ -12,6 +12,7 @@ source defaults.sh
 source brew.sh
 source appstore.sh
 source pip.sh
+source pnpm.sh
 source dock.sh
 source optimizations.sh
 source summary.sh
