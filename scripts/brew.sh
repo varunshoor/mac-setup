@@ -47,9 +47,11 @@ install_formula "ffmpeg"      # media cli
 install_formula "imagemagick" # image cli
 
 # Mac
-install_formula "mas"                    # app store cli
-install_formula "stats"                  # stats
-install_formula "jwbargsten/misc/defbro" # browser cli
+install_formula "mas"                        # app store cli
+install_formula "stats"                      # stats
+install_formula "jwbargsten/misc/defbro"     # browser cli
+install_formula "koekeishiya/formulae/yabai" # window manager
+install_formula "koekeishiya/formulae/skhd"  # utility for yabai
 
 # Git
 install_formula "gh"        # github cli
