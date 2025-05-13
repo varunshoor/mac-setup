@@ -158,9 +158,9 @@ install_formula "php" # php lang
 install_formula "pulumi" # infra as code
 
 # CSV & Data
-install_formula "saulpw/vd/visidata" # csv cli
-install_formula "tidy-viewer"        # csv cli
-install_formula "octosql"            # sql cli
+install_formula "visidata"    # csv cli
+install_formula "tidy-viewer" # csv cli
+install_formula "octosql"     # sql cli
 
 # YAML
 install_formula "yq" # yaml cli
