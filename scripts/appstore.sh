@@ -20,3 +20,4 @@ mas install 1356178125 # outline
 mas install 1526651672 # eagle for safari
 mas install 1611378436 # pure paste
 mas install 6714467650 # perplexity
+mas install 1639306886 # say no to notch
