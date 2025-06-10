@@ -171,6 +171,9 @@ install_formula "silicon" # image cli
 # Vim
 install_formula "neovim" # vim cli
 
+# AI
+install_formula "sst/tap/opencode" # Open Code. See: https://github.com/sst/opencode/tree/dev
+
 # ------------------------------------------------------------------------------
 e_message "Installing Homebrew Casks"
 # ------------------------------------------------------------------------------
