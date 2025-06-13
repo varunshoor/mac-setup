@@ -108,6 +108,11 @@ install_formula "tursodatabase/tap/turso" # sqlite db
 
 # Docker
 install_formula "lazydocker" # docker cli
+install formula "ctop"       # container metrics
+install_formula "dive"       # docker image layer analysis
+
+# DNS
+install_formula "doggo" # dns cli
 
 # Kubernetes
 install_formula "k9s"                  # k8s cli
