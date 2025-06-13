@@ -174,6 +174,9 @@ install_formula "neovim" # vim cli
 # AI
 install_formula "sst/tap/opencode" # Open Code. See: https://github.com/sst/opencode/tree/dev
 
+# Proxy Servers
+install_formula "peterldowns/tap/localias" # Local Dev Secure Aliases
+
 # ------------------------------------------------------------------------------
 e_message "Installing Homebrew Casks"
 # ------------------------------------------------------------------------------
