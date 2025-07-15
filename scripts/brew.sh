@@ -69,6 +69,7 @@ install_formula "fontforge" # font editor
 
 # AI
 install_formula "ollama" # gen ai
+install_formula "codex"  # code gen ai
 
 # Utilities
 install_formula "fd"            # find cli
