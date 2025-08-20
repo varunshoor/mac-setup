@@ -123,7 +123,8 @@ install_formula "minikube"             # k8s cli
 install_formula "eksctl"               # eks cli
 
 # Cloud
-install_formula "doctl" # digital ocean cli
+install_formula "doctl"  # digital ocean cli
+install_formula "awscli" # aws cli
 
 # JS & TS
 install_formula "fnm"  # node version manager
