@@ -121,6 +121,7 @@ install_formula "kdash-rs/kdash/kdash" # k8s dashboard
 install_formula "kubectx"              # k8s ctx switcher
 install_formula "minikube"             # k8s cli
 install_formula "eksctl"               # eks cli
+install_formula "helm"                 # helm cli
 
 # Cloud
 install_formula "doctl"       # digital ocean cli
